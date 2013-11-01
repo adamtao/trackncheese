@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Trackncheese::Application.config.secret_key_base = '2c3233439f182cc6c23c5a1e444b041547b3a2b1e48c9f40e5fd182fe61b336c348370780f4431b76792272c4bea0cbdce93513a8bc4e4d0c158470313ad6f40'
+Trackncheese::Application.config.secret_key_base = ENV['SECRET_KEY_BASE']

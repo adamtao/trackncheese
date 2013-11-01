@@ -1,25 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= content_for?(:title) ? yield(:title) : "Trackncheese" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Trackncheese" %>">
     <%= stylesheet_link_tag "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "vendor/custom.modernizr" %>
     <%= csrf_meta_tags %>
     <%= yield(:head) %>
   </head>
   <body class="<%= controller_name %> <%= action_name %>">
+    <%= yield :page_bg %>
     <div id="container" class="container">
       <header>
-        <%= render 'layouts/navigation' %>
-        <%= render 'layouts/messages' %>
+        <nav class="row">
+          <div class="large-6 small-12 columns">
+            <h1 class="logo">
+              <%= link_to(image_tag("cheese_16.png", alt: "Track 'N Cheese musician project management"), root_path) %> <%= link_to "Track 'N Cheese", root_path, :class => 'brand' %></h1>
+          </div>
+
+          <div class="large-3 small-12 columns">
+              <% if user_signed_in? %>
+                <%= link_to 'Logout', signout_path %>
+                <% if current_user.has_role? :admin %>
+                  | <%= link_to 'Admin', users_path %>
+                <% end %>
+              <% else %>
+                <p class="login-options"><small>
+                  Login with:
+                  <%= link_to image_tag('icons/trackncheese.png', alt: 'TrackNcheese', size: '16x16'), "/auth/identity" %>
+                  <%= link_to image_tag('icons/soundcloud.png', alt: "Soundcloud", size: '16x16'), "/auth/soundcloud" %>
+                  <%= link_to image_tag('icons/twitter.png', alt: 'Twitter', size: '16x16'), "/auth/twitter" %>
+                  <%= link_to image_tag('icons/facebook.png', alt: 'Facebook', size: '16x16'), "/auth/facebook" %>
+                  <%= link_to image_tag('icons/googleplus.png', alt: "Google+", size: '16x16'), "/auth/gplus" %>
+                </small></p>
+              <% end %>
+          </div>
+        </nav>
       </header>
-      <div id="main" role="main">
-        <%= yield %>
+
+      <%= render 'layouts/messages' %>
+
+      <div id="main" role="main" class="container">
+        <div class="row">
+          <div class="large-12 columns">
+            <%= yield %>
+          </div>
+        </div>
       </div>
       <footer>
       </footer>
-    </div> <!--! end of #container -->
+    </div> 
   </body>
 </html>

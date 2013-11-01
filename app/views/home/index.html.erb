@@ -1,2 +1,31 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+
+<%= content_for :page_bg do %>
+    <%= image_tag "bg.jpg", alt: "", id: "bg" %>
+<% end %>
+
+<div class="row" style="margin-top: 80px">
+	<div class="large-6 large-offset-3 columns" id="main-content">
+		<div style="text-align: center">
+			<h1>What do you want to accomplish?</h1>
+
+			<%= link_to "Release A Single", single_new_project_path, class: "radius button" %>
+			<%= link_to "Release An Album", album_new_project_path, class: "radius button" %>
+		</div>
+		
+		<p>Something else? More project templates coming soon. Meanwhile,
+			start with a <%= link_to "blank project", new_project_path %>.</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="large-6 large-offset-3 columns" id="about">
+		<p><strong>Track 'N Cheese</strong> is a project management system
+			specifically designed for musician productivity. Built by
+			musicians for musicians to just get things done.</p>
+	</div>
+</div>
+
+<div style="text-align: center; margin-top: 16px;">
+	<a href="https://twitter.com/trackncheese" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @trackncheese</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
