@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 ruby '2.0.0'
-gem 'rails', '4.0.0'
+gem 'rails', '4.0.1'
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails' 
@@ -20,6 +20,8 @@ gem 'omniauth-gplus'
 gem 'omniauth-identity'
 gem 'rolify'
 gem 'zurb-foundation'
+gem 'acts_as_list'
+gem 'friendly_id'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]

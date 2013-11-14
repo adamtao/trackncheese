@@ -1,4 +1,4 @@
-class Ability
+class Ability 
   include CanCan::Ability
 
   def initialize(user)
@@ -28,5 +28,17 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+    user ||= User.new
+
+    can :create, Project # even guests can create projects
+    can :manage, Project do |p|
+      user.projects.include?(p)
+    end
+
+    can :create, Song # even guests can create songs
+    can :manage, Song do |s|
+      s.project.user && s.project.user_id == user.id
+    end
+
   end
 end

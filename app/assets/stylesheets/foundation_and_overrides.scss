@@ -82,8 +82,8 @@ $body-font-weight: 300;
 
 // Colors
 
-$primary-color: #ffcd0d;
-// $secondary-color: #e9e9e9;
+$primary-color: #f29f0d;
+$secondary-color: #071354;
 // $alert-color: #c60f13;
 // $success-color: #5da423;
 
@@ -1259,11 +1259,11 @@ $button-function-factor: 7%;
 // Background color for the top bar
 
 $topbar-bg-color: #FFF;
-// $topbar-bg: $topbar-bg-color;
+$topbar-bg: 'none';
 
 // Height and margin
 
-// $topbar-height: 45px;
+$topbar-height: 40px;
 $topbar-margin-bottom: 8px;
 
 // Control Input height for top bar
@@ -1273,33 +1273,34 @@ $topbar-margin-bottom: 8px;
 // Controlling the styles for the title in the top bar
 
 $topbar-title-weight: bold;
-$topbar-title-font-size: em-calc(22);
+$topbar-title-font-family: 'Domine', serif;
+$topbar-title-font-size: em-calc(20);
 
 // Style the top bar dropdown elements
 
-// $topbar-dropdown-bg: #222;
-// $topbar-dropdown-link-color: #fff;
-// // $topbar-dropdown-link-bg: lighten($topbar-bg-color, 5%);
+$topbar-dropdown-bg: $secondary-color;
+$topbar-dropdown-link-color: #fff;
+$topbar-dropdown-link-bg: lighten($topbar-bg-color, 5%);
 // $topbar-dropdown-toggle-size: 5px;
 // $topbar-dropdown-toggle-color: #fff;
 // $topbar-dropdown-toggle-alpha: 0.5;
 
 // Set the link colors and styles for top-level nav
 
-$topbar-link-color: #666;
-$topbar-link-color-hover: #222;
-$topbar-link-color-active: #fff;
+$topbar-link-color: lighten($secondary-color, 60%);
+$topbar-link-color-hover: $primary-color;
+$topbar-link-color-active: $primary-color;
 $topbar-link-weight: normal;
 $topbar-link-font-size: em-calc(11);
 // $topbar-link-hover-lightness: -30%; // Darken by 30%
-$topbar-link-bg-hover: lighten($primary-color, 46%);
+$topbar-link-bg-hover: lighten($primary-color, 36%);
 $topbar-link-bg-active: lighten($primary-color, 43%);
 
-// $topbar-dropdown-label-color: #555;
+$topbar-dropdown-label-color: #555;
 // $topbar-dropdown-label-text-transform: uppercase;
 // $topbar-dropdown-label-font-weight: bold;
 // $topbar-dropdown-label-font-size: em-calc(10);
-// $topbar-dropdown-label-bg: lighten($topbar-bg-color, 5%);
+$topbar-dropdown-label-bg: $secondary-color, 5%;
 
 // Top menu icon styles
 

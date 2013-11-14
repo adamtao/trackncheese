@@ -6,37 +6,45 @@
 .bgwidth { width: 100%; }
 .bgheight { height: 100%; }
 
-h1 {
+li {
 	&.logo {
-		margin-top: 8px;
+		font-family: 'Domine', serif;
+		margin: 4px 6px 0px 8px;
 		font-size: 20px;
 		font-weight: normal;
-		a {
-			color: #333;
-			// text-shadow: 1px 1px 1px #111;
-			&:hover {
-				color: #333;
-			}
-			&:visited {
-				color: #333;
-			}
+		a:link, a:visited {
+			color: #FFF;
+			text-shadow: 1px 1px 2px #333;
 		}
-	}
-}
-p {
-	&.login-options {
-		color: #222;
-		// text-shadow: 1px 1px 0px #999;
-		img {
-			margin: 0px 2px;
-		}
+
 	}
 }
 #main-content {
-	background: url(<%= image_path 'white-90.png' %>);
+	background: url(<%= image_path 'light-gray-50.png' %>);
 	padding: 10px 30px;
 }
-
+span.hint {
+	display: block;
+	font-size: 80%;
+	margin-top: -6px;
+	margin-bottom: 26px;
+}
+input[type=range] {
+	width: 100%;
+}
+.padded {
+	padding: 15px 0px;
+}
+.smaller {
+	font-size: 80%;
+}
+.right-align {
+	text-align: right;
+}
+.h-container {
+	text-align: center; 
+	margin: 20px 0px 10px;
+}
 div#about {
 	padding: 20px 30px 6px 30px;
 	background-color: #071354;
@@ -44,3 +52,6 @@ div#about {
 	font-size: 85%;
 }
 
+nav.top-bar {
+	background: url(<%= image_path 'blue-80.png' %>);
+}

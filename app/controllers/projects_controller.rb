@@ -1,22 +1,74 @@
 class ProjectsController < ApplicationController
+	before_filter :new_project, only: :create
+	load_and_authorize_resource only: [:new, :show, :create]
 
-	def single
-		@project = Project.new( name: "My Single" )
-		@project.songs.build
-		render action: :new
+	# List all projects for current_user
+	#
+	def index	
 	end
 
-	def album
-		@project = Project.new( name: "My Album" )
-		12.times { @project.songs.build }
-		render action: :new
+	# Show a Project.
+	#
+	def show
 	end
 
+	# Form for a new Project
+	#
 	def new
 	end
 
+	# Starts a new single song project with one month to
+	# complete.
+	#
+	def single
+		@project = Project.new_single
+		render action: :new
+	end
+
+	# Starts a new album project. Default initiates 12 songs
+	# and 12 months to complete.
+	#
+	def album
+		@project = Project.new_album(12) 
+		render action: :new
+	end
+
+	# Save the new project. Store the id in a cookie in case this user
+	# doesn't have an account.
+	#
 	def create
-		# don't forget to store the project ids in the session
+		if user_signed_in?
+			@project.user_id = current_user.id
+		end
+		if @project.save
+			store_project_in_cookie(@project)
+			redirect_to @project
+		else
+			render action: :new 
+		end
+	end
+
+private
+
+	# Do this before cancan's methods so the strong parameters are in place.
+	#
+	def new_project
+	  @project = Project.new(safe_params)
+	end
+
+	# Setup which params can be passed in via web forms
+	#
+	def safe_params
+		params.require(:project).permit(:name, :finish_on, :preproduction, :production, :postproduction, :pushiness, :song_count)
+	end
+
+	# Keep the project id in the cookie.
+	#
+	def store_project_in_cookie(project)
+		cookies.permanent.signed[:my_projects] ||= []
+		projects = [cookies.permanent.signed[:my_projects]]
+		projects << project.id
+		cookies.permanent.signed[:my_projects] = projects.flatten
 	end
 
 end

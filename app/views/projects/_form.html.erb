@@ -1,6 +1,102 @@
-<%= simple_form_for :project do |f| %>
-	<%= f.input :name, label: "Project name" %>
-	<%= f.input :finish_on, label: "Goal to finish the project (date)" %>
 
-	<%= f.submit "Start Project", class: "radius button" %>
+<%= simple_form_for @project do |f| %>
+	<%= f.input :song_count, as: :hidden %>
+	<div class="row">
+		<div class="large-12 columns">
+			<%= f.input :name, label: "Project name" %>
+		</div>
+	</div>
+
+	<div class="h-container">
+		<h6>How much have you done already? <small>(if anything)</small></h6>
+	</div>
+	<div class="row">
+		<div class="large-10 large-centered columns">
+			<div class="row padded">
+				<div class="large-3 small-4 columns">
+					<label class="right-align">Pre-Production</label>
+				</div>
+				<div class="large-5 small-8 columns">
+					<%= f.input :preproduction, 
+						as: :range, 
+						required: false,
+						label: false,
+						input_html: { min: 0, max: 10} %>
+				</div>
+				<div class="large-4 hide-for-small columns">
+					<i class="smaller">(writing, practicing, arranging)</i>
+				</div>
+			</div>
+			<div class="row padded">
+				<div class="large-3 small-4 columns">
+					<label class="right-align">Production</label>
+				</div>
+				<div class="large-5 small-8 columns">
+					<%= f.input :production, 
+						as: :range, 
+						required: false,
+						label: false,
+						input_html: { min: 0, max: 10} %>
+				</div>
+				<div class="large-4 hide-for-small columns">
+					<i class="smaller">(performing, recording)</i>
+				</div>
+			</div>
+			<div class="row padded">
+				<div class="large-3 small-4 columns">
+					<label class="right-align">Post-Production</label>
+				</div>
+				<div class="large-5 small-8 columns">
+					<%= f.input :postproduction, 
+							as: :range, 
+							required: false,
+							label: false, 
+							input_html: { min: 0, max: 10} %>
+				</div>
+				<div class="large-4 hide-for-small columns">
+					<i class="smaller">(editing, mixing, mastering)</i>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="h-container">
+ 		<h6>When would you like to finish the project?</h6>
+ 	</div>
+	<div class="row">
+		<div class="large-6 large-centered columns">
+			
+			<div id="finish_on_picker" style="margin-bottom: 10px;" data-default="<%=l @project.finish_on.present? ? @project.finish_on : 1.month.from_now, format: :mmddyy %>"></div>
+			<%= f.input :finish_on, as: :hidden %>
+		</div>
+	</div>
+
+	<div class="h-container">
+		<h6>How much of a push do you need to get it done?</h6>
+	</div>
+	<div class="row">
+		<div class="large-10 large-centered columns">
+			<div class="row padded">
+				<div class="large-3 small-3 columns right-align">
+					little bit
+				</div>
+				<div class="large-5 small-7 columns">
+					<%= f.input :pushiness, 
+							label: false,
+							required: false,
+							as: :range, 
+							input_html: { min: 1, max: 4} %>
+				</div>
+				<div class="large-4 small-2 columns">
+					a lot
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" style="margin: 30px 0px">
+		<div class="large-3 large-centered columns">
+			<%= f.submit "Start Project", class: "radius button" %>
+		</div>
+	</div>
 <% end %>

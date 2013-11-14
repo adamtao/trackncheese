@@ -1,0 +1,51 @@
+<h1><%= @project.name %></h1>
+
+<div class="row">
+	<div class="large-8 columns">
+		<table style="width: 100%">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th width="60%">Title</th>
+					<th width="38%">% complete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @project.songs.each_with_index do |song, i| %>
+				<tr>
+					<td><%= i + 1 %></td>
+					<td><%= link_to song.title.present? ? song.title : "Untitled ##{i+1}", [@project, song] %></td>
+					<td>0%</td>
+				</tr>
+				<% end %>
+			</tbody>
+		</table>
+		<%= link_to "add a song", new_project_song_path(@project), class: "small radius success button" %>
+	</div>
+
+	<div class="large-4 columns">
+		<% if @project.user_id.blank? %>
+		<div class="panel">
+			<h4>Important!</h4>
+			<p>Your new project is not associated
+				with your account. We've put a cookie
+				in your browser, so you'll be able
+				to return to the project when you
+				use this browser.<p>
+			<p>However, you should
+				login or create an account in order
+				to take advantage of all the
+				trackncheese functionality and to
+				guarantee you can access your project
+				from any computer or device in the future.</p>
+		</div>
+		<% end %>
+(show cal, other settings here)
+<pre>
+<%= @project.to_yaml %>
+</pre>
+also, a google ad
+	</div>
+</div>
+
+

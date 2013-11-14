@@ -1,0 +1,33 @@
+<h1>My Projects</h1>
+
+<div class="row">
+	<div class="large-8 columns">
+		<ul class="small-block-grid-2 large-block-grid-3">
+			<% current_user.projects.each do |project| %>
+			<li><div class="panel"><h6><%= link_to project.name, project %></h6>
+				(<%= pluralize(project.songs.length, 'song') %>)
+				<br/>goal: <%= l project.finish_on, format: :short %>
+				<br/>0% done
+			</div>
+			</li>
+			<% end %>
+		</ul>
+	</div>
+	<div class="large-4 columns">
+		<% unless user_signed_in? %>
+		<div class="panel">
+			<h4>Important!</h4>
+			<p>You aren't logged in. We've put a cookie
+				in your browser, so you'll be able
+				to access your projects when you
+				use this browser.<p>
+			<p>However, you should
+				login or create an account in order
+				to take advantage of all the
+				trackncheese functionality and to
+				guarantee you can access your projects
+				from any computer or device in the future.</p>
+		</div>
+		<% end %>
+	</div>
+</div>

@@ -1,5 +1,15 @@
+
 <% flash.each do |name, msg| %>
-  <% if msg.is_a?(String) %>
-    <%= content_tag :div, msg, :id => "flash_#{name}" %>
-  <% end %>
+  <% 
+    css_class = 'alert-box'
+    if name.match(/notice/i) 
+      css_class += ' success'
+    elsif name.match(/alert|warn/)
+      css_class += ' alert'
+    else
+      css_class += ' secondary'
+    end
+  %>
+
+    <%= content_tag :div, msg, class: css_class if msg.is_a?(String) %>
 <% end %>

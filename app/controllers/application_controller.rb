@@ -8,13 +8,18 @@ class ApplicationController < ActionController::Base
     def current_user
       begin
         @current_user ||= User.find(session[:user_id]) if session[:user_id]
+        @current_user ||= User.new # There's always a user whether or not they're logged in
+        if cookies.permanent.signed[:my_projects]
+          @current_user.projects += cookies.permanent.signed[:my_projects].map{|p| Project.find(p)}
+        end
+        @current_user
       rescue Exception => e
         nil
       end
     end
 
     def user_signed_in?
-      return true if current_user
+      return true if current_user && !current_user.new_record?
     end
 
     def correct_user?
@@ -25,14 +30,13 @@ class ApplicationController < ActionController::Base
     end
 
     def authenticate_user!
-      if !current_user
+      unless user_signed_in?
         redirect_to root_url, :alert => 'You need to sign in for access to this page.'
       end
     end
 
-
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_path, :alert => exception.message
+    redirect_to root_path, :alert => exception.message + cookies.permanent.signed[:my_projects].inspect
   end
 
 end

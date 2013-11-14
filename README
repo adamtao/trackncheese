@@ -17,3 +17,13 @@ Preferences:
 ________________________
 
 License
+
+meh.
+
+________________________
+
+To do
+
+[ ] Songs aren't getting created. Probably failing validations (actually not failing there.)
+[ ] "Single" projects shouldn't land on the same page as a multi-song project. To get this to work, store song count up front.
+[ ] Starting a blank project doesn't work. Needs some default values.

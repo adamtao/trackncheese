@@ -12,45 +12,65 @@
   </head>
   <body class="<%= controller_name %> <%= action_name %>">
     <%= yield :page_bg %>
-    <div id="container" class="container">
-      <header>
-        <nav class="row">
-          <div class="large-6 small-12 columns">
-            <h1 class="logo">
-              <%= link_to(image_tag("cheese_16.png", alt: "Track 'N Cheese musician project management"), root_path) %> <%= link_to "Track 'N Cheese", root_path, :class => 'brand' %></h1>
-          </div>
 
-          <div class="large-3 small-12 columns">
+    <header>
+      <div class="sticky">
+        <nav class="top-bar">
+          <ul class="title-area">
+            <li class="logo">
+              <%= link_to(image_tag("cheese_16.png", alt: "Track 'N Cheese musician project management"), root_path, "data-no-turbolink" => true) %> <%= link_to "Track 'N Cheese", root_path, :class => 'brand', "data-no-turbolink" => true %>
+            </li>
+            <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+          </ul>
+
+          <section class="top-bar-section">
+
+            <% if user_signed_in? || cookies.permanent.signed[:my_projects] %>
+            <ul class="left">
+              <li><%= link_to 'My Projects', projects_path, "data-no-turbolink" => true %></li>
+            </ul>
+            <% end %>
+
+            <ul class="right">
               <% if user_signed_in? %>
-                <%= link_to 'Logout', signout_path %>
-                <% if current_user.has_role? :admin %>
-                  | <%= link_to 'Admin', users_path %>
-                <% end %>
+                <li><%= link_to 'Logout', signout_path %></li>
+                  <% if current_user.has_role? :admin %>
+                <li><%= link_to 'Admin', users_path, "data-no-turbolink" => true %></li>
+                  <% end %>
               <% else %>
-                <p class="login-options"><small>
-                  Login with:
-                  <%= link_to image_tag('icons/trackncheese.png', alt: 'TrackNcheese', size: '16x16'), "/auth/identity" %>
-                  <%= link_to image_tag('icons/soundcloud.png', alt: "Soundcloud", size: '16x16'), "/auth/soundcloud" %>
-                  <%= link_to image_tag('icons/twitter.png', alt: 'Twitter', size: '16x16'), "/auth/twitter" %>
-                  <%= link_to image_tag('icons/facebook.png', alt: 'Facebook', size: '16x16'), "/auth/facebook" %>
-                  <%= link_to image_tag('icons/googleplus.png', alt: "Google+", size: '16x16'), "/auth/gplus" %>
-                </small></p>
+                <li class="has-dropdown"><%= link_to "Login/Signup", '#' %>
+                  <ul class="dropdown">
+                    <li>
+                  <%= link_to image_tag('icons/trackncheese.png', alt: 'TrackNcheese', size: '16x16'), "/auth/identity", "data-no-turbolink" => true %>
+                  <%= link_to image_tag('icons/soundcloud.png', alt: "Soundcloud", size: '16x16'), "/auth/soundcloud", "data-no-turbolink" => true %>
+                  <%= link_to image_tag('icons/twitter.png', alt: 'Twitter', size: '16x16'), "/auth/twitter", "data-no-turbolink" => true %>
+                  <%= link_to image_tag('icons/facebook.png', alt: 'Facebook', size: '16x16'), "/auth/facebook", "data-no-turbolink" => true %>
+                  <%= link_to image_tag('icons/googleplus.png', alt: "Google+", size: '16x16'), "/auth/gplus", "data-no-turbolink" => true %>
+                    </li>
+                  </ul>
+                </li>
               <% end %>
-          </div>
-        </nav>
-      </header>
+            </ul>
+          </section>
 
-      <%= render 'layouts/messages' %>
+        </nav>
+      </div>
+    </header>
+
+    <div id="container" class="container">
 
       <div id="main" role="main" class="container">
         <div class="row">
           <div class="large-12 columns">
+            <%= render 'layouts/messages' %>
             <%= yield %>
           </div>
         </div>
       </div>
       <footer>
       </footer>
+
     </div> 
+
   </body>
 </html>

@@ -1,6 +1,6 @@
 
 <%= content_for :page_bg do %>
-    <%= image_tag "bg.jpg", alt: "", id: "bg" %>
+    <%= image_tag @bg, alt: "", id: "bg" %>
 <% end %>
 
 <div class="row" style="margin-top: 80px">
@@ -8,12 +8,12 @@
 		<div style="text-align: center">
 			<h1>What do you want to accomplish?</h1>
 
-			<%= link_to "Release A Single", single_new_project_path, class: "radius button" %>
-			<%= link_to "Release An Album", album_new_project_path, class: "radius button" %>
+			<%= link_to "Produce A Single", single_new_project_path, class: "radius button", "data-no-turbolink" => true %>
+			<%= link_to "Produce An Album", album_new_project_path, class: "radius button", "data-no-turbolink" => true %>
 		</div>
 		
 		<p>Something else? More project templates coming soon. Meanwhile,
-			start with a <%= link_to "blank project", new_project_path %>.</p>
+			start with a <%= link_to "blank project", new_project_path, "data-no-turbolink" => true %>.</p>
 	</div>
 </div>
 
