@@ -37,7 +37,7 @@ class Ability
 
     can :create, Song # even guests can create songs
     can :manage, Song do |s|
-      s.project.user && s.project.user_id == user.id
+      user.projects.include?(s.project)
     end
 
   end

@@ -67,7 +67,7 @@
 		<div class="large-6 large-centered columns">
 			
 			<div id="finish_on_picker" style="margin-bottom: 10px;" data-default="<%=l @project.finish_on.present? ? @project.finish_on : 1.month.from_now, format: :mmddyy %>"></div>
-			<%= f.input :finish_on, as: :hidden %>
+			<%= f.input :finish_on, as: :string, label: false %>
 		</div>
 	</div>
 

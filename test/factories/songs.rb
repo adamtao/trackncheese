@@ -2,8 +2,7 @@
 
 FactoryGirl.define do
   factory :song do
-    title "MyString"
-    project_id 1
-    position 1
+    title "My Song"
+    project
   end
 end

@@ -12,19 +12,21 @@
 			</li>
 			<% end %>
 		</ul>
+		<% if current_user.projects.length == 0 %>
+		<p>There doesn't seem to be anything here. If you had created projects
+			and don't see them, you probably just need to 
+			<%= link_to "sign in", new_session_path %>.
+		</p>
+		<% end %>
 	</div>
 	<div class="large-4 columns">
-		<% unless user_signed_in? %>
+		<% if !user_signed_in? && current_user.projects.length > 0 %>
 		<div class="panel">
 			<h4>Important!</h4>
-			<p>You aren't logged in. We've put a cookie
-				in your browser, so you'll be able
-				to access your projects when you
-				use this browser.<p>
-			<p>However, you should
-				login or create an account in order
-				to take advantage of all the
-				trackncheese functionality and to
+			<p>You aren't logged in. We've put a cookie in your browser, so you'll be able
+				to access your projects when you use this browser.<p>
+			<p>However, you should login or create an account in order
+				to take advantage of all the trackncheese functionality and to
 				guarantee you can access your projects
 				from any computer or device in the future.</p>
 		</div>

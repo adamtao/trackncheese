@@ -35,20 +35,10 @@
               <% if user_signed_in? %>
                 <li><%= link_to 'Logout', signout_path %></li>
                   <% if current_user.has_role? :admin %>
-                <li><%= link_to 'Admin', users_path, "data-no-turbolink" => true %></li>
+                <li><%= link_to 'Admin', '#', "data-no-turbolink" => true %></li>
                   <% end %>
               <% else %>
-                <li class="has-dropdown"><%= link_to "Login/Signup", '#' %>
-                  <ul class="dropdown">
-                    <li>
-                  <%= link_to image_tag('icons/trackncheese.png', alt: 'TrackNcheese', size: '16x16'), "/auth/identity", "data-no-turbolink" => true %>
-                  <%= link_to image_tag('icons/soundcloud.png', alt: "Soundcloud", size: '16x16'), "/auth/soundcloud", "data-no-turbolink" => true %>
-                  <%= link_to image_tag('icons/twitter.png', alt: 'Twitter', size: '16x16'), "/auth/twitter", "data-no-turbolink" => true %>
-                  <%= link_to image_tag('icons/facebook.png', alt: 'Facebook', size: '16x16'), "/auth/facebook", "data-no-turbolink" => true %>
-                  <%= link_to image_tag('icons/googleplus.png', alt: "Google+", size: '16x16'), "/auth/gplus", "data-no-turbolink" => true %>
-                    </li>
-                  </ul>
-                </li>
+                <li><%= link_to "Login/Signup", new_session_path, "data-no-turbolink" => true %></li>
               <% end %>
             </ul>
           </section>

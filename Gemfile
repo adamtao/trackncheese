@@ -22,6 +22,7 @@ gem 'rolify'
 gem 'zurb-foundation'
 gem 'acts_as_list'
 gem 'friendly_id'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
@@ -33,11 +34,19 @@ group :development do
   gem 'rb-fsevent', :require=>false
   gem 'rb-inotify', :require=>false
 end
+
 group :development, :test do
   gem 'factory_girl_rails'
+  gem 'zeus'
 end
+
 group :test do
+  gem 'database_cleaner'
+  gem 'turn'
+  gem 'launchy'
   gem 'capybara'
+  gem 'capybara_minitest_spec'
   gem 'minitest-spec-rails'
   gem 'minitest-wscolor'
+  gem 'guard-minitest'
 end

@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
 	before_filter :new_project, only: :create
-	load_and_authorize_resource only: [:new, :show, :create]
+	load_and_authorize_resource only: [:show, :create]
 
 	# List all projects for current_user
 	#
@@ -15,6 +15,7 @@ class ProjectsController < ApplicationController
 	# Form for a new Project
 	#
 	def new
+		@project ||= Project.new_album(0)
 	end
 
 	# Starts a new single song project with one month to
@@ -42,7 +43,7 @@ class ProjectsController < ApplicationController
 		end
 		if @project.save
 			store_project_in_cookie(@project)
-			redirect_to @project
+			redirect_to @project.songs.length == 1 ? [@project, @project.songs.first] : @project
 		else
 			render action: :new 
 		end

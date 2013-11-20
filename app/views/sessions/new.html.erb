@@ -1,0 +1,31 @@
+<h3 style="text-align: center">Login with a social network:</h3>
+
+<div id="providers">
+	<%= link_to image_tag('icons-64/soundcloud.png', alt: "Soundcloud", size: '64x64'), "/auth/soundcloud", "data-no-turbolink" => true %>
+	<%= link_to image_tag('icons-64/twitter.png', alt: 'Twitter', size: '64x64'), "/auth/twitter", "data-no-turbolink" => true %>
+	<%= link_to image_tag('icons-64/facebook.png', alt: 'Facebook', size: '64x64'), "/auth/facebook", "data-no-turbolink" => true %>
+	<%= link_to image_tag('icons-64/googleplus.png', alt: "Google+", size: '64x64'), "/auth/gplus", "data-no-turbolink" => true %>
+</div>
+
+<div class="row">
+	<div class="large-6 large-centered columns">
+		<div class="panel">
+			<p>
+			  <strong>Don&rsquo;t use these services?</strong>
+			  <%= link_to "Create an account", new_identity_path %> or login below.
+			</p>
+			<%= form_tag "/auth/identity/callback" do %>
+			  <div class="field">
+			    <%= label_tag :auth_key, "Email" %>
+			    <%= text_field_tag :auth_key %>
+			  </div>
+			  <div class="field">
+			    <%= label_tag :password %>
+			    <%= password_field_tag :password %>
+			  </div>
+
+			  <div class="actions"><%= submit_tag "Login", class: "medium round button" %></div>
+			<% end %>
+		</div>
+	</div>
+</div>

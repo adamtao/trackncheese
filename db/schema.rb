@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131114162957) do
+ActiveRecord::Schema.define(version: 20131120182350) do
 
   create_table "friendly_id_slugs", force: true do |t|
     t.string   "slug",                      null: false
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20131114162957) do
 
   create_table "projects", force: true do |t|
     t.string   "name"
-    t.string   "user_id"
+    t.integer  "user_id"
     t.string   "cached_slug"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -66,7 +66,10 @@ ActiveRecord::Schema.define(version: 20131114162957) do
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "cached_slug"
   end
+
+  add_index "songs", ["cached_slug"], name: "index_songs_on_cached_slug", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"
