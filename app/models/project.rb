@@ -4,7 +4,10 @@ class Project < ActiveRecord::Base
 
 	belongs_to :user
 	attr_accessor :song_count
-	has_many :songs, -> { order :position }
+	has_many :songs, -> { order :position }, dependent: :destroy
+	has_many :tasks, -> { order :due_on }, dependent: :destroy
+
+	after_create :generate_tasks
 
 	# Instatiate a new album project with some default values.
 	#
@@ -28,6 +31,40 @@ class Project < ActiveRecord::Base
 		new_album(1)
 	end
 
+  # Setup the initial tasks for the Project. (project-wide)
+  #
+  def generate_tasks
+    Task.generate_for(self)
+  end
+
+  def percent_complete
+    if project_wide_completed_tasks.length > 0
+      ( project_wide_completed_tasks.length.to_f / project_wide_tasks.length.to_f ) * 100.0
+    else
+      0
+    end
+  end
+
+  def completed_tasks
+    @completed_tasks ||= tasks.where("completed_at IS NOT NULL AND completed_at <= ?", Date.tomorrow).order("completed_at DESC")
+  end
+
+  def incomplete_tasks
+    @incomplete_tasks ||= tasks.where("completed_at IS NULL OR completed_at > ?", Date.tomorrow).order("due_on ASC")
+  end
+
+  def project_wide_completed_tasks
+  	@project_wide_completed_tasks ||= project_wide_tasks.where("completed_at IS NOT NULL AND completed_at <= ?", Date.tomorrow).order("completed_at DESC")
+  end
+
+  def project_wide_incomplete_tasks
+  	@project_wide_incomplete_tasks ||= project_wide_tasks.where("completed_at IS NULL OR completed_at > ?", Date.tomorrow).order("due_on ASC")
+  end
+
+  def project_wide_tasks
+  	@project_wide_tasks ||= Task.where("project_id = ? OR song_id IN (?)", self.id, self.songs.pluck(:id))
+  end
+
   def slug_candidates
     [
       :name,
@@ -46,6 +83,29 @@ class Project < ActiveRecord::Base
 
 	def song_count
 		self.songs.length
+	end
+
+	def single?
+		song_count == 1
+	end
+
+	# The number of days for each song to be finished within the project
+	#
+	def song_interval_in_days
+    @song_interval_in_days ||= case song_count
+    	when 0 
+    		days_to_complete
+    	else
+    		days_to_complete / song_count
+    end
+	end
+
+	def start_on
+		created_at.to_date
+	end
+
+	def days_to_complete
+		(finish_on.to_date - start_on).to_i
 	end
 
 end

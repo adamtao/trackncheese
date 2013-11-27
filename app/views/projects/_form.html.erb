@@ -1,11 +1,25 @@
 
 <%= simple_form_for @project do |f| %>
-	<%= f.input :song_count, as: :hidden %>
-	<div class="row">
-		<div class="large-12 columns">
-			<%= f.input :name, label: "Project name" %>
+	
+	<% if @project.song_count == 1 %>
+		<div class="row">
+			<div class="large-12 columns">
+				<%= f.input :name, label: "Project name" %>
+			</div>
 		</div>
-	</div>
+		<%= f.input :song_count, as: :hidden %>
+
+	<% else %>
+		<div class="row">
+			<div class="large-9 columns">
+				<%= f.input :name, label: "Project name" %>
+			</div>
+			<div class="large-3 columns">
+				<%= f.input :song_count, as: :integer, label: "How many songs?" %>
+			</div>
+		</div>
+
+	<% end %>
 
 	<div class="h-container">
 		<h6>How much have you done already? <small>(if anything)</small></h6>
@@ -85,7 +99,7 @@
 							label: false,
 							required: false,
 							as: :range, 
-							input_html: { min: 1, max: 4} %>
+							input_html: { min: 0, max: 3} %>
 				</div>
 				<div class="large-4 small-2 columns">
 					a lot

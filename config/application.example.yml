@@ -18,5 +18,7 @@ FACEBOOK_KEY: Your_Facebook_Key
 FACEBOOK_SECRET: Your_Facebook_Secret
 SOUNDCLOUD_CLIENT_ID: Your_Soundcloud_Client_ID
 SOUNDCLOUD_SECRET: Your_Soundcloud_Secret
+GPLUS_KEY: Your_Google_Plus_Key
+GPLUS_SECRET: Your_Google_Plus_Secret
 ROLES: [admin, user, VIP]
 SECRET_KEY_BASE: 'long-string-usually-found-in-config-initializers-secret_token.rb'

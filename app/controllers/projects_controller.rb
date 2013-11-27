@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
 	before_filter :new_project, only: :create
-	load_and_authorize_resource only: [:show, :create]
+	load_and_authorize_resource only: [:show, :create, :destroy]
 
 	# List all projects for current_user
 	#
@@ -10,6 +10,7 @@ class ProjectsController < ApplicationController
 	# Show a Project.
 	#
 	def show
+		redirect_to [@project, @project.songs.first] if @project.single?
 	end
 
 	# Form for a new Project
@@ -43,9 +44,18 @@ class ProjectsController < ApplicationController
 		end
 		if @project.save
 			store_project_in_cookie(@project)
-			redirect_to @project.songs.length == 1 ? [@project, @project.songs.first] : @project
+			redirect_to @project
 		else
 			render action: :new 
+		end
+	end
+
+	def destroy
+		if @project.destroy
+			remove_project_from_cookie(@project)
+			redirect_to projects_path
+		else
+			redirect_to @project, alert: "There was a problem deleting the project"
 		end
 	end
 
@@ -70,6 +80,15 @@ private
 		projects = [cookies.permanent.signed[:my_projects]]
 		projects << project.id
 		cookies.permanent.signed[:my_projects] = projects.flatten
+	end
+
+	# Remove the project from the cookie.
+	#
+	def remove_project_from_cookie(project)
+		cookies.permanent.signed[:my_projects] ||= []
+		pids = cookies.permanent.signed[:my_projects]
+		pids.delete(project.id)
+		cookies.permanent.signed[:my_projects] = pids
 	end
 
 end

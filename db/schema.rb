@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131120182350) do
+ActiveRecord::Schema.define(version: 20131127181000) do
 
   create_table "friendly_id_slugs", force: true do |t|
     t.string   "slug",                      null: false
@@ -70,6 +70,33 @@ ActiveRecord::Schema.define(version: 20131120182350) do
   end
 
   add_index "songs", ["cached_slug"], name: "index_songs_on_cached_slug", using: :btree
+
+  create_table "tasks", force: true do |t|
+    t.string   "name"
+    t.date     "due_on"
+    t.integer  "song_id"
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "completed_at"
+  end
+
+  add_index "tasks", ["project_id"], name: "index_tasks_on_project_id", using: :btree
+  add_index "tasks", ["song_id"], name: "index_tasks_on_song_id", using: :btree
+
+  create_table "template_tasks", force: true do |t|
+    t.string   "name"
+    t.integer  "position"
+    t.integer  "score"
+    t.string   "task_type"
+    t.string   "production_stage"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "template_tasks", ["production_stage"], name: "index_template_tasks_on_production_stage", using: :btree
+  add_index "template_tasks", ["score"], name: "index_template_tasks_on_score", using: :btree
+  add_index "template_tasks", ["task_type"], name: "index_template_tasks_on_task_type", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"

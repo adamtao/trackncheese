@@ -20,11 +20,5 @@ License
 
 meh.
 
-________________________
 
-To do
-
-[ ] "Single" projects shouldn't land on the same page as a multi-song project. To get this to work, store song count up front.
-[ ] Test: If I login or signup, and there are project ids in the cookie, then update those projects with my user-id.
-[ ] After creating songs, create tasks and initial tracks/arrangement
 

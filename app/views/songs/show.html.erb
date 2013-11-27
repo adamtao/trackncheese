@@ -1,1 +1,77 @@
-<h1><%= @song.title %></h1>
+<div class="row">
+	<div class="large-8 columns">
+		<h1><%= @song.title %></h1>
+		<div class="icon-actions">
+			<% if @song.single? %>
+			<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Add a song to the project">
+				<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "Add a song", size: "24x24"), new_project_song_path(@project) %>
+			</span>
+			<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Delete entire project">
+				<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "Delete project", size: "24x24"), @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete %>
+			</span>
+			<% else %>
+			<%= link_to "<< Back to the project", @song.project, class: "small" %>
+			<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Delete this song">
+				<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "Delete song", size: "24x24"), [@project, @song], data: { confirm: "Are you sure? This cannot be undone." }, method: :delete %>
+			</span>
+			<% end %>
+		</div>
+	</div>
+
+	<div class="large-4 columns">
+		<h6 class="subheader" style="text-align: center">Goal: finish by <%=l @song.finish_on, format: :long %>.</h6>
+		<div class="progress success radius" id="task-counter-<%= @song.project_id %>" data-completedcount="<%= @song.completed_tasks.count %>" data-incompletecount="<%= @song.incomplete_tasks.count %>">
+			<span class="meter" id="meter-<%= @song.project_id %>" style="width: <%=number_to_percentage @song.percent_complete, precision: 0 %>">
+			</span>
+		</div>
+		<div style="text-align: center; margin-bottom: 6px;">
+			<small id='percent-complete-<%=@song.project_id %>'><%=number_to_percentage @song.percent_complete, precision: 0 %> complete</small>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="large-8 columns">
+		<h4 class="subheader">Song Tasks</h4>
+		<ul id="task-list">
+			<% @song.incomplete_tasks.each do |task| %>
+			<li id="task_row_<%= task.id %>">
+				<%= check_box_tag task.id, task.id, task.complete?, class: 'completer', 
+					data: { 
+						task: task.id, 
+						project: (task.project) ? task.project_id : task.song.project_id,
+						song: task.song_id,
+						name: task.name, 
+						due_on: I18n.l(task.due_on, format: :short)
+					} %>
+				<%= link_to task.name, edit_project_song_task_path(@song, @song.project, task) %>
+				<i>due: <%=l task.due_on, format: :short %></i>
+			</li>
+			<% end %>
+		</ul>
+
+		<h6 class="subheader" id='completed-tasks-title'>Completed Tasks
+			(<%= @song.completed_tasks.count %>)</h6>
+		<ul id="completed-tasks">
+			<% @song.completed_tasks.each do |task| %>
+			<li id="task_row_<%= task.id %>">
+				<%= check_box_tag task.id, task.id, task.complete?, class: 'incompleter', 
+					data: { 
+						task: task.id, 
+						project: (task.project) ? task.project_id : task.song.project_id,
+						song: task.song_id,
+						name: task.name, 
+						due_on: I18n.l(task.due_on, format: :short)
+					} %>
+				<%= link_to task.name, edit_project_song_task_path(@song, @song.project, task) %>
+				<i>completed: <%=l task.completed_at.to_date, format: :short %></i>
+			</li>
+			<% end %>
+		</ul>
+	</div>
+
+	<div class="large-4 columns">
+		<%# google ad here %>
+	</div>
+
+</div>

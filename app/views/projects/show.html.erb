@@ -1,13 +1,42 @@
-<h1><%= @project.name %></h1>
+<div class="row">
+	<div class="large-8 columns">
+		<h1><%= @project.name %></h1>
+		<div class="icon-actions">
+			<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Add a song">
+				<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "Add a song", size: "24x24"), new_project_song_path(@project) %>
+			</span>
+			<% if @project.song_count > 1 %>
+			<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Edit song titles">
+				<%= link_to image_tag("icons-128/Edit.png", alt: "Quick edit", size: "24x24"), edit_project_path(@project) %>
+			</span>
+			<% end %>
+			<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Delete entire project">
+				<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "Delete project", size: "24x24"), @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete %>
+			</span>
+		</div>
+	</div>
+	<div class="large-4 columns">
+		<h6 class="subheader" style="text-align: center">Goal: finish by <%=l @project.finish_on, format: :long %>.</h6>
+		<div class="progress success radius" id="task-counter-<%= @project.id %>" data-completedcount="<%= @project.project_wide_completed_tasks.length %>" data-incompletecount="<%= @project.project_wide_incomplete_tasks.length %>">
+			<span class="meter" id="meter-<%= @project.id %>" style="width: <%=number_to_percentage @project.percent_complete, precision: 0 %>">
+			</span>
+		</div>
+		<div style="text-align: center; margin-bottom: 6px;">
+			<small id='percent-complete-<%=@project.id %>'><%=number_to_percentage @project.percent_complete, precision: 0 %> complete</small>
+		</div>
+	</div>
+</div>
 
 <div class="row">
 	<div class="large-8 columns">
+
 		<table style="width: 100%">
 			<thead>
 				<tr>
 					<th>#</th>
-					<th width="60%">Title</th>
-					<th width="38%">% complete</th>
+					<th width="50%">Title</th>
+					<th width="24%">Progress</th>
+					<th width="24%">Goal</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -15,36 +44,71 @@
 				<tr>
 					<td><%= i + 1 %></td>
 					<td><%= link_to song.title.present? ? song.title : "Untitled ##{i+1}", [@project, song] %></td>
-					<td>0%</td>
+					<td>
+						<div class="progress success radius">
+							<span class="meter" id="meter-<%= song.id %>" style="width: <%=number_to_percentage song.percent_complete, precision: 0 %>">
+							</span>
+							<small><%=number_to_percentage song.percent_complete, precision: 0 %> complete</small>
+						</div>
+					</td>
+					<td><%=l song.finish_on, format: :short %></td>
 				</tr>
 				<% end %>
 			</tbody>
 		</table>
-		<%= link_to "add a song", new_project_song_path(@project), class: "small radius success button" %>
+
+		<h4 class="subheader">Project Tasks</h4>
+		<ul id="task-list">
+			<% @project.incomplete_tasks.each do |task| %>
+			<li id="task_row_<%= task.id %>">
+				<%= check_box_tag task.id, task.id, task.complete?, class: 'completer', 
+					data: { 
+						task: task.id, 
+						project: task.project_id,
+						name: task.name, 
+						# worker: (task.worker) ? task.worker.name : 'Unassigned',
+						due_on: I18n.l(task.due_on, format: :short)
+					} %>
+				<%= link_to task.name, edit_project_task_path(@project, task) %>
+				<i>due: <%=l task.due_on, format: :short %></i>
+			</li>
+			<% end %>
+		</ul>
+
+		<h6 class="subheader" id='completed-tasks-title'>Completed Tasks
+			(<%= @project.completed_tasks.count %>)</h6>
+		<ul id="completed-tasks">
+			<% @project.completed_tasks.each do |task| %>
+			<li id="task_row_<%= task.id %>">
+				<%= check_box_tag task.id, task.id, task.complete?, class: 'incompleter', 
+					data: { 
+						task: task.id, 
+						project: task.project_id,
+						name: task.name, 
+						# worker: (task.worker) ? task.worker.name : 'Unassigned',
+						due_on: I18n.l(task.due_on, format: :short)
+					} %>
+				<%= link_to task.name, edit_project_task_path(@project, task) %>
+				<i>completed: <%=l task.completed_at.to_date, format: :short %></i>
+			</li>
+			<% end %>
+		</ul>
 	</div>
 
 	<div class="large-4 columns">
 		<% if @project.user_id.blank? %>
 		<div class="panel">
 			<h4>Important!</h4>
-			<p>Your new project is not associated
-				with your account. We've put a cookie
-				in your browser, so you'll be able
-				to return to the project when you
-				use this browser.<p>
-			<p>However, you should
-				login or create an account in order
-				to take advantage of all the
-				trackncheese functionality and to
-				guarantee you can access your project
-				from any computer or device in the future.</p>
+			<p>Your new project is not associated with your account. We've put a cookie
+			in your browser, so you'll be able to return to the project when you
+			use this browser.<p>
+			
+			<p>However, you should <%= link_to "login or create an account", new_session_path %>
+			in order to take advantage of all the trackncheese functionality and to guarantee 
+			you can access your project from any computer or device in the future.</p>
 		</div>
 		<% end %>
-(show cal, other settings here)
-<pre>
-<%= @project.to_yaml %>
-</pre>
-also, a google ad
+
 	</div>
 </div>
 

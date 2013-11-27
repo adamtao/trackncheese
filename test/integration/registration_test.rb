@@ -11,7 +11,12 @@ class RegistrationIntegrationTest < ActionDispatch::IntegrationTest
 	describe "Local user registration" do 
 
 		before do 
+			OmniAuth.config.test_mode = false # Use prod mode for the local identity tests
 			click_on "Create an account"
+		end
+
+		after	do
+			OmniAuth.config.test_mode = true
 		end
 
 		it "should raise an error with invalid credentials" do 
@@ -62,12 +67,16 @@ class RegistrationIntegrationTest < ActionDispatch::IntegrationTest
 	end
 
 	# Not sure how to test these...
-	describe "Social registrations" do
-		it "twitter registration should work"
-		it "facebook registration should work"
-		it "soundcloud registration should work"
-		it "google plus registration should work"
-		it "should request email address"
-	end
+	#
+	# http://ashleshawrites.wordpress.com/2012/07/02/testing-omniauth-creating-mock-data/
+	# https://github.com/intridea/omniauth/wiki/Integration-Testing
+	#
+	# describe "Social registrations" do
+	# 	it "twitter registration should work"
+	# 	it "facebook registration should work"
+	# 	it "soundcloud registration should work"
+	# 	it "google plus registration should work"
+	# 	it "should request email address"
+	# end
 
 end

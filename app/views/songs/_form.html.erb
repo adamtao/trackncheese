@@ -1,0 +1,6 @@
+<%= simple_form_for [@project, @song] do |f| %>
+
+	<%= f.input :title %>
+	<%= f.submit "Add song to project", class: "medium round button" %>
+
+<% end %>

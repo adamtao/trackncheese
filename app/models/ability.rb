@@ -40,5 +40,14 @@ class Ability
       user.projects.include?(s.project)
     end
 
+    can :create, Task
+    can :manage, Task do |t|
+      if t.project
+        user.projects.include?(t.project)
+      else
+        user.projects.include?(t.song.project)
+      end
+    end
+
   end
 end

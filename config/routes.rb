@@ -9,6 +9,17 @@ Trackncheese::Application.routes.draw do
 	resources :projects do
 		get 'single', on: :new
 		get 'album',  on: :new
-		resources :songs
+		resources :tasks do 
+			member do
+				get :toggle
+			end
+		end
+		resources :songs do 
+			resources :tasks do 
+				member do 
+					get :toggle
+				end
+			end
+		end
 	end
 end

@@ -51,6 +51,13 @@ class NonUserIntegrationTest < ActionDispatch::IntegrationTest
 			visit album_new_project_path
 		end
 
+		it "should allow the user to choose the number of songs" do 
+			fill_in :project_song_count, with: 6
+			click_on "Start Project"
+			p = Project.last
+			p.songs.count.must_equal 6
+		end
+
 		it "should create a new album project" do
 			fill_in :project_name, with: @attributes[:name]
 			fill_in :project_finish_on, with: @attributes[:finish_on]
@@ -104,12 +111,17 @@ class NonUserIntegrationTest < ActionDispatch::IntegrationTest
 			p.songs.first.title.must_equal(p.name)
 		end
 
+		it "wont allow the user to change the number of songs" do 
+			wont_have_field :project_song_count
+		end
+
 	end
 
 	describe "Claiming ownership" do 
 
 		# setup an anonymous project
 		before do 
+			OmniAuth.config.test_mode = false
 			@project = my_cookie_project
 			visit "/identities/new" 
 			fill_in :name, with: "Joe Schmoe"
