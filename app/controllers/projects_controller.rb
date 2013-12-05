@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
 	before_filter :new_project, only: :create
-	load_and_authorize_resource only: [:show, :create, :destroy]
+	load_and_authorize_resource only: [:show, :create, :edit, :update, :destroy]
 
 	# List all projects for current_user
 	#
@@ -50,6 +50,21 @@ class ProjectsController < ApplicationController
 		end
 	end
 
+	# Load a project for editing
+	#
+	def edit
+	end
+
+	# Update (save changes) to a given project
+	#
+	def update
+		if @project.update_attributes(safe_params)
+			redirect_to @project
+		else
+			render action: "edit"
+		end
+	end
+
 	def destroy
 		if @project.destroy
 			remove_project_from_cookie(@project)
@@ -70,7 +85,17 @@ private
 	# Setup which params can be passed in via web forms
 	#
 	def safe_params
-		params.require(:project).permit(:name, :finish_on, :preproduction, :production, :postproduction, :pushiness, :song_count)
+		params.require(:project).permit(:name, 
+			:finish_on, 
+			:preproduction, 
+			:production, 
+			:postproduction, 
+			:pushiness, 
+			:song_count,
+			songs_attributes: [
+				:title, :finish_on, :id, :_destroy
+			]
+		)
 	end
 
 	# Keep the project id in the cookie.

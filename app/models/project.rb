@@ -7,6 +7,8 @@ class Project < ActiveRecord::Base
 	has_many :songs, -> { order :position }, dependent: :destroy
 	has_many :tasks, -> { order :due_on }, dependent: :destroy
 
+	accepts_nested_attributes_for :songs
+
 	after_create :generate_tasks
 
 	# Instatiate a new album project with some default values.
@@ -29,6 +31,16 @@ class Project < ActiveRecord::Base
 	#
 	def self.new_single
 		new_album(1)
+	end
+
+	# Tries to load projects with an array of ids.
+	#
+	def self.try_to_load(project_ids)
+		p = []
+		[project_ids].flatten.each do |id|
+			p << Project.find(id) if Project.exists?(id)
+		end
+		p
 	end
 
   # Setup the initial tasks for the Project. (project-wide)

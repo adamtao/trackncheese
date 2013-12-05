@@ -91,8 +91,22 @@ class ProjectsIntegrationTest < ActionDispatch::IntegrationTest
 		end
 		
 		it "should quick-edit song names and project name" do
-			skip "Add quick edit tests and functions"
 			click_on "Quick edit" # This will be the alt tag of an image
+			new_project_name = "#{@project.name}123"
+			new_project_goal = 2.months.from_now.to_date
+			new_song_title   = "#{@project.songs.first.title}345"
+			# new_song_goal = 4.months.from_now.to_date
+			fill_in :project_name, with: new_project_name
+			fill_in :project_songs_attributes_0_title, with: new_song_title
+			# fill_in :project_songs_attributes_0_finish_on, with: new_song_goal
+			fill_in :project_finish_on, with: new_project_goal
+			click_on "Save Changes"
+			current_path.must_equal project_path(@project)
+			@project.reload
+			@project.name.must_equal new_project_name
+			@project.finish_on.must_equal new_project_goal
+			@project.songs.first.title.must_equal new_song_title
+			# @project.songs.first.finish_on.must_equal new_song_goal
 		end
 
 		it "should have a link to add a new song" do 

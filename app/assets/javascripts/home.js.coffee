@@ -10,4 +10,6 @@ $ ->
 	)
 
 	# hide the text field with the date (don't use a hidden field so we can test the form)
-	$("div.project_finish_on").hide()
+	$("form#new_project div.project_finish_on").hide()
+
+	$("form.edit_project #project_finish_on").datepicker()

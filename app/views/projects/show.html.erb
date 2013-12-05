@@ -6,13 +6,10 @@
 				<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "Add a song", size: "24x24"), new_project_song_path(@project) %>
 			</span>
 			<% if @project.song_count > 1 %>
-			<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Edit song titles">
+			<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Edit project and song titles">
 				<%= link_to image_tag("icons-128/Edit.png", alt: "Quick edit", size: "24x24"), edit_project_path(@project) %>
 			</span>
 			<% end %>
-			<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Delete entire project">
-				<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "Delete project", size: "24x24"), @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete %>
-			</span>
 		</div>
 	</div>
 	<div class="large-4 columns">
@@ -108,6 +105,11 @@
 			you can access your project from any computer or device in the future.</p>
 		</div>
 		<% end %>
+
+		<div style="text-align: right;">
+			<%= link_to "delete project", @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete, class: "delete" %>
+			<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "Delete project", size: "24x24"), @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete %>
+		</div>
 
 	</div>
 </div>

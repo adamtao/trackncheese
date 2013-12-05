@@ -1,0 +1,48 @@
+<%= simple_form_for @project do |f| %>
+
+<div class="row">
+	<div class="large-8 columns">
+		<h4><%= f.input :name, label: "Project Name:" %></h4>
+	</div>
+	<div class="large-4 columns">
+		<h4><%= f.input :finish_on, label: "Goal to finish project:", as: :string %></h4>
+	</div>
+</div>
+
+<div class="row">
+	<div class="large-8 columns">
+
+		<table style="width: 100%">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th width="60%">Title</th>
+					<th width="38%">Goal</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @project.songs.each_with_index do |song, i| %>
+				<%= f.simple_fields_for :songs, song do |s| %>
+				<tr>
+					<td><%= i + 1 %></td>
+					<td><%= s.input :title, label: false %></td>
+					<td><%=l song.finish_on, format: :short %></td>
+				</tr>
+				<% end %>
+				<% end %>
+			</tbody>
+		</table>
+
+	</div>
+
+	<div class="large-4 columns">
+		<div style="text-align: center">
+			<%= f.submit "Save Changes", class: "medium button round" %>
+			<%= link_to "cancel", @project %>
+		</div>
+	</div>
+</div>
+
+<% end %>
+
+

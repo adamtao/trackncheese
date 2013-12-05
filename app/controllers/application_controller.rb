@@ -5,17 +5,20 @@ class ApplicationController < ActionController::Base
   helper_method :correct_user?
 
   private
+
+    # Always returns a User object. If the user is authenticated, then it returns that user.
+    # Otherwise a new, unsaved User is returned.
+    #
     def current_user
       begin
-        @current_user ||= User.find(session[:user_id]) if session[:user_id]
-        @current_user ||= User.new # There's always a user whether or not they're logged in
-        if cookies.permanent.signed[:my_projects]
-          @current_user.projects += cookies.permanent.signed[:my_projects].map{|p| Project.find(p)}
-        end
-        @current_user
+        @current_user ||= (session[:user_id]) ? User.find(session[:user_id]) : User.new 
       rescue Exception => e
-        nil
+        @current_user = User.new
       end
+      if cookies.permanent.signed[:my_projects]
+        @current_user.projects += Project.try_to_load(cookies.permanent.signed[:my_projects]) 
+      end
+      @current_user
     end
 
     def user_signed_in?
@@ -37,7 +40,7 @@ class ApplicationController < ActionController::Base
 
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_path, :alert => exception.message + cookies.permanent.signed[:my_projects].inspect
+    redirect_to root_path, :alert => exception.message #+ cookies.permanent.signed[:my_projects].inspect
   end
 
 end
