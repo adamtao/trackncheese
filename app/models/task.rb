@@ -36,5 +36,11 @@ class Task < ActiveRecord::Base
 	def complete?
 		self.completed_at.present?
 	end
+
+	# Determines if this task is late
+	#
+	def late?
+		@late ||= (self.due_on < Date.today)	
+	end
 	
 end

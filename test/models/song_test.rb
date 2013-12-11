@@ -62,6 +62,13 @@ class SongTest < ActiveSupport::TestCase
 			assert @project.songs[1].start_on == @song.finish_on.tomorrow
 		end
 
+		it "should determine if it is late" do 
+			@project.finish_on = 1.day.ago
+			@project.save
+			@song.reload
+			assert @song.late?
+		end
+
 		# it "should schedule songs with concurrency"
 		# TODO: make an option where the songs are not due one after another,
 		# but where all the preproduction happens together, then all the production
@@ -77,13 +84,12 @@ class SongTest < ActiveSupport::TestCase
 			@song = @project.songs.first
 		end
 
-		it "should auto-generate tasks" do 
-			song_template_tasks = TemplateTask.where("task_type LIKE '%song%'").count
-			assert @song.tasks.count == song_template_tasks
-		end
-
-		it "should determine due date for tasks" do 
-			assert @song.tasks.first.due_on.present?
+		it "should mark the song late if a task is late" do 
+			task = @song.tasks.first
+			task.due_on = 1.day.ago
+			task.save
+			@song.reload
+			assert @song.late?
 		end
 
 	end

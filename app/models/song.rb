@@ -82,4 +82,16 @@ class Song < ActiveRecord::Base
     self.higher_item
   end
 
+  # Determines if this song is late
+  #
+  def late?
+    @late ||= (finish_on < Date.today) || self.late_tasks.length > 0
+  end
+
+  # Collects late tasks
+  #
+  def late_tasks
+    @late_tasks ||= self.tasks.where(["due_on < ?", Date.today])
+  end
+
 end

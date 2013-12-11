@@ -13,3 +13,5 @@ $ ->
 	$("form#new_project div.project_finish_on").hide()
 
 	$("form.edit_project #project_finish_on").datepicker()
+	$("#task_due_on").datepicker()
+	

@@ -2,7 +2,7 @@ class TasksController < ApplicationController
 	before_filter :new_task, only: :create
 	load_resource :project
 	before_filter :load_song_if_present
-	load_and_authorize_resource only: [:show, :new, :create, :destroy, :toggle]
+	load_and_authorize_resource only: [:show, :new, :create, :edit, :update, :destroy, :toggle]
 
 	def toggle
     @task.completed_at = @task.completed_at.blank? ? Time.now : nil
@@ -13,6 +13,41 @@ class TasksController < ApplicationController
       }
       format.js { render nothing: true }
     end
+	end
+
+	def new
+		@element = (params[:song_id]) ? [@project, @song, @task] : [@project, @task]
+	end
+
+	def create	
+		redirect = [@project]
+		if params[:song_id]	
+			@task.song_id = @song.id 
+			redirect << @song
+		else
+			@task.project_id = @project.id
+		end
+		if @task.save
+			redirect_to redirect, notice: "Groovy. Your new task was added."
+		else
+			render action: 'new'
+		end
+	end
+
+	def edit
+		@element = (params[:song_id]) ? [@project, @song, @task] : [@project, @task]
+	end
+
+	def update
+		redirect = [@project]
+		if params[:song_id]	
+			redirect << @song
+		end
+		if @task.update_attributes(safe_params)
+			redirect_to redirect, notice: "All set. Your task was updated."
+		else
+			render action: 'edit'
+		end		
 	end
 
 private

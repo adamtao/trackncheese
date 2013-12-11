@@ -22,3 +22,4 @@ GPLUS_KEY: Your_Google_Plus_Key
 GPLUS_SECRET: Your_Google_Plus_Secret
 ROLES: [admin, user, VIP]
 SECRET_KEY_BASE: 'long-string-usually-found-in-config-initializers-secret_token.rb'
+ADSENSE_CLIENT: Google_Adsense_Client_String

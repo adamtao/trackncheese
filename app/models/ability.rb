@@ -44,7 +44,7 @@ class Ability
     can :manage, Task do |t|
       if t.project
         user.projects.include?(t.project)
-      else
+      elsif t.song
         user.projects.include?(t.song.project)
       end
     end

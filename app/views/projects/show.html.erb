@@ -40,7 +40,8 @@
 				<% @project.songs.each_with_index do |song, i| %>
 				<tr>
 					<td><%= i + 1 %></td>
-					<td><%= link_to song.title.present? ? song.title : "Untitled ##{i+1}", [@project, song] %></td>
+					<td><%= link_to song.title.present? ? song.title : "Untitled ##{i+1}", [@project, song],
+					class: song.late? ? "late" : '' %></td>
 					<td>
 						<div class="progress success radius">
 							<span class="meter" id="meter-<%= song.id %>" style="width: <%=number_to_percentage song.percent_complete, precision: 0 %>">
@@ -55,6 +56,10 @@
 		</table>
 
 		<h4 class="subheader">Project Tasks</h4>
+		<div class="icon-actions">
+			<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "", size: "24x24"), new_project_task_path(@project) %>
+			<%= link_to "new task", new_project_task_path(@project) %>
+		</div>
 		<ul id="task-list">
 			<% @project.incomplete_tasks.each do |task| %>
 			<li id="task_row_<%= task.id %>">
@@ -110,6 +115,8 @@
 			<%= link_to "delete project", @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete, class: "delete" %>
 			<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "Delete project", size: "24x24"), @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete %>
 		</div>
+
+		<%= google_adsense_include_tag client: ENV['ADSENSE_CLIENT'], slot: 'project_page_right_column', width: 300, height: 250 %>
 
 	</div>
 </div>

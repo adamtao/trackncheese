@@ -34,13 +34,13 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 		end
 
 		it "should have a link to delete the project" do 
-			must_have_link "Delete project"
+			must_have_link "delete project"
 		end
 
 		it "should delete the project and remove it from the cookies" do 
 			count = Project.count 
 			this_project_path = project_path(@project)
-			click_on "Delete project"
+			click_on "delete project"
 			Project.count.must_equal(count - 1)
 			current_path.must_equal projects_path 
 			wont_have_link @project.name, href: this_project_path
@@ -86,13 +86,13 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 		end
 
 		it "should have a button to delete the song" do 
-			must_have_link "Delete song"
+			must_have_link "delete song"
 		end
 
 		it "should delete the song from the project" do 
 			count = @project.song_count 
 			this_song_path = project_song_path(@project, @song)
-			click_on "Delete song"
+			click_on "delete song"
 			@project.reload
 			@project.song_count.must_equal(count - 1)
 			current_path.must_equal project_path(@project)
@@ -135,13 +135,48 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 		it "should show a progress indicator" do 
 			must_have_css("#meter-#{ @song.project_id }")
 		end
+
+		it "should indicate late tasks" do 
+			task = @song.tasks.first
+			task.due_on = 1.day.ago
+			task.save
+			visit project_song_path(@project, @song)
+			must_have_css("a.late")
+		end
 		
-		it "should add new tasks"
+		it "should add new tasks" do 
+			task_count = @song.tasks.length
+			click_on "new task"
+			fill_in :task_name, with: "Watch TV"
+			fill_in :task_due_on, with: 2.weeks.from_now
+			click_on "Save task"
+			@song.reload
+			@song.tasks.count.must_equal( task_count + 1 )
+			current_path.must_equal project_song_path(@project, @song)
+		end
+
 		it "should delete tasks"
-		it "should edit tasks"
+		
+		it "should edit tasks" do 
+			task = @song.tasks.first
+			new_due_date = 6.months.from_now.to_date
+			new_task_name = "#{task.name}999"
+			click_on task.name
+			fill_in :task_name, with: new_task_name
+			fill_in :task_due_on, with: new_due_date
+			click_on "Save task"
+			task.reload
+			task.name.must_equal new_task_name
+			task.due_on.must_equal new_due_date
+			current_path.must_equal project_song_path(@project, @song)
+		end
+
 		it "should have the arranger"
 		it "should have a calendar"
-		it "might show a google ad"
+
+		it "might show a google ad" do 
+			must_have_xpath("//div[@style='width:300px;height:250px;background:#c8c8c8;']")
+		end
 
 	end
 

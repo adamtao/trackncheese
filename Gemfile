@@ -23,6 +23,7 @@ gem 'rolify'
 gem 'zurb-foundation'
 gem 'acts_as_list'
 gem 'friendly_id'
+gem 'ads-rails'
 
 group :development do
   gem 'better_errors'

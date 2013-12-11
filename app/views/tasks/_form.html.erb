@@ -1,0 +1,8 @@
+<%= simple_form_for @element do |f| %>
+
+	<%= f.input :name %>
+	<%= f.input :due_on, as: :string %>
+
+	<%= f.submit "Save task", class: "medium round button" %>
+
+<% end %>

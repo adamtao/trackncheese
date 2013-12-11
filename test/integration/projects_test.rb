@@ -28,7 +28,10 @@ class ProjectsIntegrationTest < ActionDispatch::IntegrationTest
 		end
 
 		it "should show a calendar"
-		it "might show a google ad"
+
+		it "might show a google ad" do 
+			must_have_xpath("//div[@style='width:300px;height:250px;background:#c8c8c8;']")
+		end
 
 		it "should have a status bar" do 
 			must_have_css("#meter-#{@project.id}")
@@ -42,6 +45,15 @@ class ProjectsIntegrationTest < ActionDispatch::IntegrationTest
 			visit project_path(@project)
 			song.reload
 			must_have_content "#{song.percent_complete.to_i}%"
+		end
+
+		it "should have red text on songs that are late" do 
+			@project.finish_on = 1.day.ago
+			@project.save
+			visit project_path(@project)
+			song = @project.songs.first
+			song.finish_on.must_be '<', Date.today
+			must_have_css("a.late")
 		end
 
 		it "should show the goal finish date" do 
@@ -81,9 +93,32 @@ class ProjectsIntegrationTest < ActionDispatch::IntegrationTest
 			must_have_css("ul#completed-tasks")
 		end
 
-		it "should add new tasks"
+		it "should add new tasks" do 
+			task_count = @project.tasks.length
+			click_on "new task"
+			fill_in :task_name, with: "Watch a movie"
+			fill_in :task_due_on, with: 2.weeks.from_now
+			click_on "Save task"
+			@project.reload
+			@project.tasks.count.must_equal( task_count + 1 )
+			current_path.must_equal project_path(@project)
+		end
+
 		it "should delete tasks"
-		it "should edit tasks"
+
+		it "should edit tasks" do 
+			task = @project.tasks.first
+			new_due_date = 6.months.from_now.to_date
+			new_task_name = "#{task.name}999"
+			click_on task.name
+			fill_in :task_name, with: new_task_name
+			fill_in :task_due_on, with: new_due_date
+			click_on "Save task"
+			task.reload
+			task.name.must_equal new_task_name
+			task.due_on.must_equal new_due_date
+			current_path.must_equal project_path(@project)
+		end
 
 		it "should list songs" do 
 			song = @project.songs.first
