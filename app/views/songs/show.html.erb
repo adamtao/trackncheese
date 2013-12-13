@@ -1,6 +1,7 @@
-<div class="row">
-	<div class="large-8 columns">
+<div class="title row">
+	<div class="large-10 columns">
 		<h1><%= @song.title %></h1>
+		<h6 class="subheader">Goal: finish by <%=l @song.finish_on, format: :long %>.</h6>
 		<div class="icon-actions">
 			<% if @song.single? %>
 				<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Add a song to the project">
@@ -11,22 +12,46 @@
 			<% end %>
 		</div>
 	</div>
-
-	<div class="large-4 columns">
-		<h6 class="subheader" style="text-align: center">Goal: finish by <%=l @song.finish_on, format: :long %>.</h6>
-		<div class="progress success radius" id="task-counter-<%= @song.project_id %>" data-completedcount="<%= @song.completed_tasks.count %>" data-incompletecount="<%= @song.incomplete_tasks.count %>">
-			<span class="meter" id="meter-<%= @song.project_id %>" style="width: <%=number_to_percentage @song.percent_complete, precision: 0 %>">
-			</span>
-		</div>
-		<div style="text-align: center; margin-bottom: 6px;">
-			<small id='percent-complete-<%=@song.project_id %>'><%=number_to_percentage @song.percent_complete, precision: 0 %> complete</small>
+	<div class="large-2 columns">
+		<div style="text-align: right;">
+			<% if @song.single? %>
+				<%= link_to "delete project", @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete, class: "delete" %>
+				<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "", size: "24x24"), @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete %>
+			<% else %>
+				<%= link_to "delete song", [@project, @song], data: { confirm: "Are you sure? This cannot be undone." }, method: :delete, class: "delete" %>
+				<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "", size: "24x24"), [@project, @song], data: { confirm: "Are you sure? This cannot be undone." }, method: :delete %>
+			<% end %>
 		</div>
 	</div>
 </div>
 
+
 <div class="row">
-	<div class="large-8 columns">
-		<h4 class="subheader">Song Tasks</h4>
+	<div class="large-12 columns">
+		<div class="panel">Temporary holding place for arranger</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="large-7 columns">
+
+		<div class="task-list row">
+			<div class="large-3 small-12 columns">
+				<h5 class="subheader">Song Tasks</h5>
+			</div>
+			<div class="large-6 small-9 columns">
+				<div class="progress success radius" id="task-counter-<%= @song.project_id %>" data-completedcount="<%= @song.completed_tasks.count %>" data-incompletecount="<%= @song.incomplete_tasks.count %>">
+					<span class="meter" id="meter-<%= @song.project_id %>" style="width: <%=number_to_percentage @song.percent_complete, precision: 0 %>">
+					</span>
+				</div>
+			</div>
+			<div class="large-3 small-3 columns">
+				<div class="status_container">
+					<small id='percent-complete-<%=@song.project_id %>'><%=number_to_percentage @song.percent_complete, precision: 0 %> complete</small>
+				</div>
+			</div>
+		</div>
+
 		<div class="icon-actions">
 			<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "", size: "24x24"), new_project_song_task_path(@project, @song) %>
 			<%= link_to "new task", new_project_song_task_path(@project, @song) %>
@@ -42,9 +67,9 @@
 						name: task.name, 
 						due_on: I18n.l(task.due_on, format: :short)
 					} %>
-				<%= link_to task.name, edit_project_song_task_path(@song.project, @song, task),
-				class: task.late? ? "late" : "" %>
-				<i>due: <%=l task.due_on, format: :short %></i>
+				<%= link_to task.name, edit_project_song_task_path(@song.project, @song, task) %>
+				<%= content_tag :span, class: task.late? ? "late" : "" do %><i>due: <%=l task.due_on, format: :short %></i><% end %>
+				<%= link_to(image_tag('trash.gif', alt: "delete task #{task.id}"), [@song.project, @song, task], method: :delete, data: { confirm: "Are you sure you want to delete the task?"} ) %>
 			</li>
 			<% end %>
 		</ul>
@@ -69,20 +94,14 @@
 		</ul>
 	</div>
 
-	<div class="large-4 columns">
+	<div class="large-5 columns">
+		<div id="calendar" data-events="<%= project_song_url(@project, @song, format: :json) %>"></div>
 
-		<div style="text-align: right;">
-			<% if @song.single? %>
-				<%= link_to "delete project", @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete %>
-				<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "", size: "24x24"), @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete %>
-			<% else %>
-				<%= link_to "delete song", [@project, @song], data: { confirm: "Are you sure? This cannot be undone." }, method: :delete %>
-				<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "", size: "24x24"), [@project, @song], data: { confirm: "Are you sure? This cannot be undone." }, method: :delete %>
-			<% end %>
-		</div>
-
+		<div class="ad-container">
 		<%= google_adsense_include_tag client: ENV['ADSENSE_CLIENT'], slot: 'song_page_right_column', width: 300, height: 250 %>
+		</div>
 
 	</div>
 
 </div>
+<br/>

@@ -1,0 +1,53 @@
+
+div.title {
+	padding-bottom: 12px;
+	h1 {
+		line-height: 90%; 
+		margin-bottom: 10px;
+	}
+}
+div.icon-actions {
+	margin-top: 10px;
+	margin-bottom: 6px;
+	span.has-tip {
+		border-bottom: none;
+		font-weight: normal;
+	}
+}
+div.task-list {
+	margin-top: 40px;
+}
+.status_container {
+	padding-top: 2px; 
+	margin-left: -20px;
+}
+ul {
+	&#task-list, &#completed-tasks {
+		margin-left: 5px;
+		list-style-type: none;
+		li {
+			list-style-type: none;
+			input[type=checkbox] {
+				margin-right: 4px;
+			}
+			i {
+				padding-left: 4px;
+				font-size: 80%;
+				color: #666;
+			}
+			.late {
+				i {
+					color: red;
+				}
+			}
+		}
+	}
+	&#completed-tasks {
+		font-size: 85%;
+	}
+}
+.large-5 {
+	.ad-container {
+		padding-left: 88px;
+	}
+}

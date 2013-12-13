@@ -20,15 +20,13 @@ class TasksController < ApplicationController
 	end
 
 	def create	
-		redirect = [@project]
 		if params[:song_id]	
 			@task.song_id = @song.id 
-			redirect << @song
 		else
 			@task.project_id = @project.id
 		end
 		if @task.save
-			redirect_to redirect, notice: "Groovy. Your new task was added."
+			redirect_to redirect_path, notice: "Groovy. Your new task was added."
 		else
 			render action: 'new'
 		end
@@ -39,15 +37,16 @@ class TasksController < ApplicationController
 	end
 
 	def update
-		redirect = [@project]
-		if params[:song_id]	
-			redirect << @song
-		end
 		if @task.update_attributes(safe_params)
-			redirect_to redirect, notice: "All set. Your task was updated."
+			redirect_to redirect_path, notice: "All set. Your task was updated."
 		else
 			render action: 'edit'
 		end		
+	end
+
+	def destroy
+		@task.destroy
+		redirect_to redirect_path
 	end
 
 private
@@ -70,6 +69,15 @@ private
 		if params[:song_id]
 			@song = Song.find params[:song_id]
 		end
+	end
+
+	# Build the redirect URL
+	def redirect_path
+		r = [@project]
+		if params[:song_id]	
+			r << @song
+		end
+		r
 	end
 
 end

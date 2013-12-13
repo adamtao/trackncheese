@@ -15,3 +15,12 @@ $ ->
 	$("form.edit_project #project_finish_on").datepicker()
 	$("#task_due_on").datepicker()
 	
+	$('#calendar').fullCalendar
+		events: $('#calendar').data('events')
+		theme: true
+		header: {
+			left: 'title',
+			center: '',
+			right: 'prev,next'
+		}
+

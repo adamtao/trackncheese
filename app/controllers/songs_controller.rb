@@ -4,6 +4,13 @@ class SongsController < ApplicationController
 	load_and_authorize_resource only: [:show, :new, :create, :destroy]
 
 	def show
+		respond_to do |format|
+			format.html
+			format.json {
+				calendar_items = @song.incomplete_tasks + [Task.new(name: "Finish song", due_on: @song.finish_on)]
+				render json: calendar_items.to_json(methods: [:title, :start])
+			}
+		end
 	end
 
 	def new		

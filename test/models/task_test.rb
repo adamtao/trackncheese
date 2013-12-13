@@ -11,11 +11,11 @@ class TaskTest < ActiveSupport::TestCase
 
 		it "should auto-generate tasks" do 
 			song_template_tasks = TemplateTask.where("task_type LIKE '%song%'").count
-			assert @song.tasks.count == song_template_tasks
+			assert_equal @song.tasks.count, song_template_tasks
 		end
 
 		it "should determine due date for tasks" do 
-			assert @song.tasks.first.due_on.present?
+			assert_present @song.tasks.first.due_on
 		end
 
 		it "should determine if a task is late" do 

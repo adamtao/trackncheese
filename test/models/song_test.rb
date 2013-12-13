@@ -5,6 +5,7 @@ class SongTest < ActiveSupport::TestCase
 	describe "Single song" do 
 
 		before do 
+			setup_task_templates
 			@project = FactoryGirl.create(:single_project)
 			@song = @project.songs.first
 		end
@@ -14,15 +15,15 @@ class SongTest < ActiveSupport::TestCase
 		end
 
 		it "#finish_on should be the same as the project target date" do 
-			assert @song.finish_on == @project.finish_on
+			assert_equal @song.finish_on, @project.finish_on
 		end
 
 		it "should have the same days_to_complete as the project" do 
-			assert @song.days_to_complete == @project.days_to_complete
+			assert_equal @song.days_to_complete, @project.days_to_complete
 		end
 
 		it "should have the same start date as the project" do 
-			assert @song.start_on == @project.start_on
+			assert_equal @song.start_on, @project.start_on
 		end
 
 	end
@@ -43,11 +44,11 @@ class SongTest < ActiveSupport::TestCase
 		end
 
 		it "should determine the previous song" do 
-			assert @project.songs[1].previous_song == @song
+			assert_equal @project.songs[1].previous_song, @song
 		end
 
 		it "should return nil for the previous song if it is first" do 
-			assert @song.previous_song == nil
+			assert_equal @song.previous_song, nil
 		end
 
 		it "should determine how many days to complete the song" do 
@@ -55,11 +56,11 @@ class SongTest < ActiveSupport::TestCase
 		end
 
 		it "first song should have the same start date as the project" do 
-			assert @song.start_on == @project.start_on
+			assert_equal @song.start_on, @project.start_on
 		end
 
 		it "second song should start_on one day after first song ends" do 
-			assert @project.songs[1].start_on == @song.finish_on.tomorrow
+			assert_equal @project.songs[1].start_on, @song.finish_on.tomorrow
 		end
 
 		it "should determine if it is late" do 

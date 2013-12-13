@@ -27,7 +27,11 @@ class ProjectsIntegrationTest < ActionDispatch::IntegrationTest
 			@project = my_cookie_project
 		end
 
-		it "should show a calendar"
+		it "should show a calendar" do 
+			must_have_xpath("//div[@id='calendar'][@data-events='#{project_url(@project, project_wide: true, format: :json)}']")
+		end
+
+		it "should toggle project-wide tasks in calendar"
 
 		it "might show a google ad" do 
 			must_have_xpath("//div[@style='width:300px;height:250px;background:#c8c8c8;']")
@@ -104,7 +108,14 @@ class ProjectsIntegrationTest < ActionDispatch::IntegrationTest
 			current_path.must_equal project_path(@project)
 		end
 
-		it "should delete tasks"
+		it "should delete tasks" do 
+			task_count = @project.tasks.length
+			task = @project.tasks.first
+			click_on "delete task #{task.id}"
+			@project.reload
+			@project.tasks.length.must_equal (task_count - 1)
+			current_path.must_equal project_path(@project)
+		end
 
 		it "should edit tasks" do 
 			task = @project.tasks.first

@@ -42,5 +42,15 @@ class Task < ActiveRecord::Base
 	def late?
 		@late ||= (self.due_on < Date.today)	
 	end
+
+	# Alias for javascript calendar "start" date
+	def start
+		self.due_on
+	end
+
+	# Alias for javascript calendar "title"
+	def title
+		self.name
+	end
 	
 end

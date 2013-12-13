@@ -94,4 +94,9 @@ class Song < ActiveRecord::Base
     @late_tasks ||= self.tasks.where(["due_on < ?", Date.today])
   end
 
+  # Alias for javascript calendar "start" date
+  def start
+    self.finish_on
+  end
+
 end

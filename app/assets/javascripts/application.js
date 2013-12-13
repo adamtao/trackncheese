@@ -16,6 +16,7 @@
 //= require jquery-ui
 //= require foundation
 //= require turbolinks
+//= require fullcalendar.min
 //= require_tree .
 
 $(function(){ $(document).foundation(); });

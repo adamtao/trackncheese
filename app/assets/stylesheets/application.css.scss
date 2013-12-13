@@ -11,6 +11,7 @@
  *= require_self
  *= require foundation_and_overrides
  *= require cheese/jquery-ui-1.10.3.custom
+ *= require fullcalendar
  *= require_tree .
 */
 
@@ -33,37 +34,12 @@ ul {
 			}
 		}
 	}
-	&#task-list, &#completed-tasks {
-		margin-left: 5px;
-		list-style-type: none;
-		li {
-			list-style-type: none;
-			input[type=checkbox] {
-				margin-right: 4px;
-			}
-			i {
-				padding-left: 4px;
-				font-size: 80%;
-				color: #666;
-			}
-		}
-	}
-	&#completed-tasks {
-		font-size: 85%;
-	}
 }
 
 .error_messages {
 	color: red;
 }
 
-div.icon-actions {
-	margin-bottom: 6px;
-	span.has-tip {
-		border-bottom: none;
-		font-weight: normal;
-	}
-}
 .late {
 	color: red;
 }

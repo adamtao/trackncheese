@@ -141,7 +141,7 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 			task.due_on = 1.day.ago
 			task.save
 			visit project_song_path(@project, @song)
-			must_have_css("a.late")
+			must_have_css("span.late")
 		end
 		
 		it "should add new tasks" do 
@@ -155,7 +155,14 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 			current_path.must_equal project_song_path(@project, @song)
 		end
 
-		it "should delete tasks"
+		it "should delete tasks" do 
+			task_count = @song.tasks.length
+			task = @song.tasks.first
+			click_on "delete task #{task.id}"
+			@song.reload
+			@song.tasks.length.must_equal (task_count - 1)
+			current_path.must_equal project_song_path(@project, @song)
+		end
 		
 		it "should edit tasks" do 
 			task = @song.tasks.first
@@ -172,7 +179,10 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 		end
 
 		it "should have the arranger"
-		it "should have a calendar"
+		
+		it "should show a calendar" do 
+			must_have_xpath("//div[@id='calendar'][@data-events='#{project_song_url(@project, @song, format: :json)}']")
+		end
 
 		it "might show a google ad" do 
 			must_have_xpath("//div[@style='width:300px;height:250px;background:#c8c8c8;']")

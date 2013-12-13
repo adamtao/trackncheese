@@ -1,6 +1,18 @@
-<div class="row">
-	<div class="large-8 columns">
+<div class="title row">
+	<div class="large-10 columns">
 		<h1><%= @project.name %></h1>
+		<h6 class="subheader">Goal: finish by <%=l @project.finish_on, format: :long %>.</h6>
+	</div>
+	<div class="large-2 columns">
+		<div style="text-align: right;">
+			<%= link_to "delete project", @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete, class: "delete" %>
+			<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "Delete project", size: "24x24"), @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete %>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="large-7 columns">
 		<div class="icon-actions">
 			<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Add a song">
 				<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "Add a song", size: "24x24"), new_project_song_path(@project) %>
@@ -11,22 +23,6 @@
 			</span>
 			<% end %>
 		</div>
-	</div>
-	<div class="large-4 columns">
-		<h6 class="subheader" style="text-align: center">Goal: finish by <%=l @project.finish_on, format: :long %>.</h6>
-		<div class="progress success radius" id="task-counter-<%= @project.id %>" data-completedcount="<%= @project.project_wide_completed_tasks.length %>" data-incompletecount="<%= @project.project_wide_incomplete_tasks.length %>">
-			<span class="meter" id="meter-<%= @project.id %>" style="width: <%=number_to_percentage @project.percent_complete, precision: 0 %>">
-			</span>
-		</div>
-		<div style="text-align: center; margin-bottom: 6px;">
-			<small id='percent-complete-<%=@project.id %>'><%=number_to_percentage @project.percent_complete, precision: 0 %> complete</small>
-		</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="large-8 columns">
-
 		<table style="width: 100%">
 			<thead>
 				<tr>
@@ -55,7 +51,24 @@
 			</tbody>
 		</table>
 
-		<h4 class="subheader">Project Tasks</h4>
+		<div class="task-list row">
+			<div class="large-3 small-12 columns">
+				<h5 class="subheader">Project Tasks</h5>
+			</div>
+			<div class="large-6 small-9 columns">
+				<div class="progress success radius" id="task-counter-<%= @project.id %>" data-completedcount="<%= @project.project_wide_completed_tasks.length %>" data-incompletecount="<%= @project.project_wide_incomplete_tasks.length %>">
+				<span class="meter" id="meter-<%= @project.id %>" style="width: <%=number_to_percentage @project.percent_complete, precision: 0 %>">
+				</span>
+				</div>
+			</div>
+			<div class="large-3 small-3 columns">
+				<div class="status_container">
+					<small id='percent-complete-<%=@project.id %>'><%=number_to_percentage @project.percent_complete, precision: 0 %> complete</small>
+				</div>				
+			</div>
+		</div>
+
+
 		<div class="icon-actions">
 			<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "", size: "24x24"), new_project_task_path(@project) %>
 			<%= link_to "new task", new_project_task_path(@project) %>
@@ -73,6 +86,7 @@
 					} %>
 				<%= link_to task.name, edit_project_task_path(@project, task) %>
 				<i>due: <%=l task.due_on, format: :short %></i>
+				<%= link_to(image_tag('trash.gif', alt: "delete task #{task.id}"), [@project, task], method: :delete, data: { confirm: "Are you sure you want to delete the task?"} ) %>
 			</li>
 			<% end %>
 		</ul>
@@ -97,11 +111,14 @@
 		</ul>
 	</div>
 
-	<div class="large-4 columns">
+	<div class="large-5 columns">
+
+		<div id="calendar" data-events="<%= project_url(@project, project_wide: true, format: :json) %>"></div>
+
 		<% if @project.user_id.blank? %>
 		<div class="panel">
 			<h4>Important!</h4>
-			<p>Your new project is not associated with your account. We've put a cookie
+			<p>Your project is not associated with your account. We've put a cookie
 			in your browser, so you'll be able to return to the project when you
 			use this browser.<p>
 			
@@ -111,12 +128,9 @@
 		</div>
 		<% end %>
 
-		<div style="text-align: right;">
-			<%= link_to "delete project", @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete, class: "delete" %>
-			<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "Delete project", size: "24x24"), @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete %>
-		</div>
-
+		<div class="ad-container">
 		<%= google_adsense_include_tag client: ENV['ADSENSE_CLIENT'], slot: 'project_page_right_column', width: 300, height: 250 %>
+		</div>
 
 	</div>
 </div>

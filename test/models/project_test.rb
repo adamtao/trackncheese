@@ -10,7 +10,7 @@ class ProjectTest < ActiveSupport::TestCase
 
 		it "should create one song named the same as the project" do 
 			@project.songs.length.must_equal 1
-			@project.songs.first.title.must_equal @project.name
+			assert_equal @project.songs.first.title, @project.name
 		end
 
 		it '#single? should be true' do 
@@ -30,7 +30,7 @@ class ProjectTest < ActiveSupport::TestCase
 		end
 
 		it "should assign due date" do 
-			assert @project.tasks.first.due_on.present?
+			assert_present @project.tasks.first.due_on
 		end
 	end
 

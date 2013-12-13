@@ -10,7 +10,14 @@ class ProjectsController < ApplicationController
 	# Show a Project.
 	#
 	def show
-		redirect_to [@project, @project.songs.first] if @project.single?
+		respond_to do |format|
+			format.html { redirect_to [@project, @project.songs.first] if @project.single? }
+			format.json { 
+				calendar_items = @project.songs
+				calendar_items += (params[:project_wide]) ? @project.project_wide_incomplete_tasks : @project.incomplete_tasks
+				render json: calendar_items.to_json(methods: [:title, :start])
+			}
+		end
 	end
 
 	# Form for a new Project
