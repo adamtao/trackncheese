@@ -120,4 +120,8 @@ class Project < ActiveRecord::Base
 		(finish_on.to_date - start_on).to_i
 	end
 
+	def calendar_items(options={})
+		@calendar_items ||= [self.songs, (options[:project_wide]) ? project_wide_incomplete_tasks : incomplete_tasks, Task.new(name: "Finish project", due_on: self.finish_on)].flatten
+	end
+
 end

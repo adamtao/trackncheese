@@ -20,10 +20,12 @@ gem 'omniauth-soundcloud'
 gem 'omniauth-gplus'
 gem 'omniauth-identity'
 gem 'rolify'
-gem 'zurb-foundation'
+# gem 'zurb-foundation' # foundation 4.xx
+gem 'foundation-rails'
 gem 'acts_as_list'
 gem 'friendly_id'
 gem 'ads-rails'
+gem 'rabl'
 
 group :development do
   gem 'better_errors'

@@ -29,7 +29,7 @@
 					<th>#</th>
 					<th width="50%">Title</th>
 					<th width="24%">Progress</th>
-					<th width="24%">Goal</th>
+					<th width="24%" class="hide-for-small">Goal</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -45,7 +45,7 @@
 							<small><%=number_to_percentage song.percent_complete, precision: 0 %> complete</small>
 						</div>
 					</td>
-					<td><%=l song.finish_on, format: :short %></td>
+					<td class="hide-for-small"><%=l song.finish_on, format: :short %></td>
 				</tr>
 				<% end %>
 			</tbody>

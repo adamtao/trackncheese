@@ -43,14 +43,10 @@ class Task < ActiveRecord::Base
 		@late ||= (self.due_on < Date.today)	
 	end
 
-	# Alias for javascript calendar "start" date
-	def start
-		self.due_on
+	# The color for this item on the calendar
+	#
+	def color_for_calendar
+		@color_for_calendar ||= (self.song_id.present?) ? self.song.color_for_calendar : nil
 	end
 
-	# Alias for javascript calendar "title"
-	def title
-		self.name
-	end
-	
 end

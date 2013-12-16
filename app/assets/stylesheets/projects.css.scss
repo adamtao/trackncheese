@@ -46,8 +46,13 @@ ul {
 		font-size: 85%;
 	}
 }
-.large-5 {
-	.ad-container {
-		padding-left: 88px;
+
+@media only screen and (min-width: 980px) {
+	.large-5 {
+		.ad-container {
+			padding-left: 44px;
+			margin-bottom: 10px;
+		}
 	}
 }
+

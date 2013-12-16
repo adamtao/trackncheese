@@ -83,6 +83,7 @@ class SongTest < ActiveSupport::TestCase
 			setup_task_templates
 			@project = FactoryGirl.create(:album_project)
 			@song = @project.songs.first
+			@song.generate_tasks
 		end
 
 		it "should mark the song late if a task is late" do 

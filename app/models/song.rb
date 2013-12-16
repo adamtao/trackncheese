@@ -10,7 +10,9 @@ class Song < ActiveRecord::Base
 	validates :title, presence: true
 	# validates :project_id, presence: true
 
-  after_create :generate_tasks
+  # Moving this to the controller so the song count is correct
+  # when generating/scheduling tasks.
+  # after_create :generate_tasks
 
   def slug_candidates
     [
@@ -94,9 +96,20 @@ class Song < ActiveRecord::Base
     @late_tasks ||= self.tasks.where(["due_on < ?", Date.today])
   end
 
-  # Alias for javascript calendar "start" date
-  def start
-    self.finish_on
+  # Items for javascript calendar
+  #
+  def calendar_items
+    @calendar_items ||= incomplete_tasks + [Task.new(name: "Finish song", due_on: self.finish_on)]
   end
 
+  # TODO: This should go somewhere else...
+  def self.colors
+    ['#FF69B4', '#FF7F50', '#FFD700', '#DDA0DD', '#00FF7F', '#B0E0E6', '#D2B48C', '#2F4F4F', '#CD5C5C', '#FFC0CB', '#FF4500', '#F0E68C', '#9932CC', '#6B8E23', '#7FFFD4', '#7B68EE', '#A0522D']
+  end
+
+  # The color for this item on the calendar
+  #
+  def color_for_calendar
+    @color_for_calendar ||= self.class.colors[self.position]
+  end
 end

@@ -10,13 +10,10 @@ class ProjectsController < ApplicationController
 	# Show a Project.
 	#
 	def show
+		@params = params # for json
 		respond_to do |format|
 			format.html { redirect_to [@project, @project.songs.first] if @project.single? }
-			format.json { 
-				calendar_items = @project.songs
-				calendar_items += (params[:project_wide]) ? @project.project_wide_incomplete_tasks : @project.incomplete_tasks
-				render json: calendar_items.to_json(methods: [:title, :start])
-			}
+			format.json 
 		end
 	end
 
@@ -50,6 +47,7 @@ class ProjectsController < ApplicationController
 			@project.user_id = current_user.id
 		end
 		if @project.save
+			@project.songs.each { |s| s.generate_tasks }
 			store_project_in_cookie(@project)
 			redirect_to @project
 		else
