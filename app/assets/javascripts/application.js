@@ -11,11 +11,11 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery.turbolinks
+     // require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery-ui
 //= require foundation
-//= require turbolinks
+    // require turbolinks // turbolinks keeps screwing things up
 //= require fullcalendar.min
 //= require_tree .
 

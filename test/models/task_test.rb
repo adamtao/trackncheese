@@ -21,7 +21,7 @@ class TaskTest < ActiveSupport::TestCase
 
 		it "should determine if a task is late" do 
 			task = @song.tasks.first
-			task.due_on = 1.day.ago
+			task.due_on = 2.days.ago
 			task.save
 			@song.reload
 			assert task.late?

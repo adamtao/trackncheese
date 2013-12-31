@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
   <head>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= content_for?(:title) ? yield(:title) : "Trackncheese" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Trackncheese" %>">
     <%= stylesheet_link_tag "application", :media => "all" %>
-    <%= javascript_include_tag "application" %>
     <%= javascript_include_tag "vendor/modernizr" %>
     <%= csrf_meta_tags %>
     <%= yield(:head) %>
@@ -14,8 +14,8 @@
     <%= yield :page_bg %>
 
     <header>
-      <div class="sticky">
-        <nav class="top-bar">
+      <div class="fixed">
+        <nav class="top-bar" data-topbar>
           <ul class="title-area">
             <li class="logo">
               <%= link_to(image_tag("cheese_16.png", alt: "Track 'N Cheese musician project management"), root_path, "data-no-turbolink" => true) %> <%= link_to "Track 'N Cheese", root_path, :class => 'brand', "data-no-turbolink" => true %>
@@ -24,21 +24,18 @@
           </ul>
 
           <section class="top-bar-section">
-
-            <% if user_signed_in? || cookies.permanent.signed[:my_projects] %>
-            <ul class="left">
-              <li><%= link_to 'My Projects', projects_path, "data-no-turbolink" => true %></li>
-            </ul>
-            <% end %>
-
             <ul class="right">
+              <% if user_signed_in? || cookies.permanent.signed[:my_projects] %>
+                <li class="has-form"><%= link_to 'My Projects', projects_path, "data-no-turbolink" => true, class: "button" %></li>
+                <li class="divider"></li>
+              <% end %>
               <% if user_signed_in? %>
-                <li><%= link_to 'Logout', signout_path %></li>
+                <li class="has-form"><%= link_to 'Logout', signout_path, class: "button" %></li>
                   <% if current_user.has_role? :admin %>
                 <li><%= link_to 'Admin', '#', "data-no-turbolink" => true %></li>
                   <% end %>
               <% else %>
-                <li><%= link_to "Login/Signup", new_session_path, "data-no-turbolink" => true %></li>
+                <li class="has-form"><%= link_to "Login/Signup", new_session_path, "data-no-turbolink" => true, class: "button" %></li>
               <% end %>
             </ul>
           </section>
@@ -53,14 +50,24 @@
         <div class="row">
           <div class="large-12 columns">
             <%= render 'layouts/messages' %>
+            <% if content_for?(:breadcrumbs) %>
+              <ul class="breadcrumbs">
+                <li><a href="/projects">My Projects</a></li>
+                <%= yield :breadcrumbs %>
+              </ul>
+            <% end %>
             <%= yield %>
           </div>
         </div>
       </div>
-      <footer>
-      </footer>
 
     </div> 
 
+    <footer>
+    </footer>
+    
+    <%= yield :modals %>
+
+    <%= javascript_include_tag "application" %>
   </body>
 </html>

@@ -19,9 +19,16 @@ header {
 	margin-bottom: 20px;
 }
 
+.panel p {
+	font-weight: 100;
+}
+
 div#providers {
 	text-align: center;
 	margin: 30px;
+}
+div.content {
+	width: 100%;
 }
 
 ul {

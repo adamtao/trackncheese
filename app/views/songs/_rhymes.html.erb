@@ -1,0 +1,16 @@
+
+<% @already_active ||= 0 %>
+<% @song.rhyme_suggestions.each do |word, rhymes| %>
+	<dd>
+		<a href="#<%= word %>">"<%= word.to_s.upcase %>"</a>
+		<div id="<%= word %>" class="content <%= 'active' unless @already_active > 0 %>">
+
+			<ul id="rhymes_for_<%= word %>" class="rhymes">
+				<% rhymes.sample(10).each do |r| %>
+				<li><%= rhyme_format r %></li>
+				<% end %>
+			</ul>
+		</div>
+	</dd>
+	<% @already_active = 1 %>
+<% end %>

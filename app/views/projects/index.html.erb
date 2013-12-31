@@ -3,7 +3,7 @@
 <div class="row">
 	<div class="large-8 columns">
 		<ul class="small-block-grid-2 large-block-grid-3">
-			<% current_user.projects.each do |project| %>
+			<% current_user.projects.uniq.each do |project| %>
 			<li><div class="panel"><h6><%= link_to project.name, project %></h6>
 				(<%= pluralize(project.songs.length, 'song') %>)
 				<br/>goal: <%= l project.finish_on, format: :short %>
@@ -31,5 +31,10 @@
 			 from any computer or device in the future.</p>
 		</div>
 		<% end %>
+		<div class="panel">
+			<h4>Start Something:</h4>
+			<%= link_to "New Single", single_new_project_path, class: "tiny radius button", "data-no-turbolink" => true %>
+			<%= link_to "New Album", album_new_project_path, class: "tiny radius button", "data-no-turbolink" => true %>
+		</div>
 	</div>
 </div>

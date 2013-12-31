@@ -1,7 +1,10 @@
 <div class="title row">
 	<div class="large-10 columns">
 		<h1><%= @project.name %></h1>
-		<h6 class="subheader">Goal: finish by <%=l @project.finish_on, format: :long %>.</h6>
+		<h6 class="subheader">Goal: finish by <%=l @project.finish_on, format: :long %>.
+			<i>(<%= distance_of_time_in_words_to_now(@project.finish_on) %>
+				<%= (@project.finish_on > Date.today) ? "from now" : "ago" %>)</i>
+		</h6>
 	</div>
 	<div class="large-2 columns">
 		<div style="text-align: right;">
@@ -135,4 +138,6 @@
 	</div>
 </div>
 
-
+<%= content_for :breadcrumbs do %>
+	<li class="current"><a href="#"><%= @project.name %></a></li>
+<% end %>

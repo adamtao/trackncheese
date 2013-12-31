@@ -65,6 +65,7 @@ class SongTest < ActiveSupport::TestCase
 
 		it "should determine if it is late" do 
 			@project.finish_on = 1.day.ago
+			@project.created_at = 2.months.ago
 			@project.save
 			@song.reload
 			assert @song.late?
@@ -88,10 +89,47 @@ class SongTest < ActiveSupport::TestCase
 
 		it "should mark the song late if a task is late" do 
 			task = @song.tasks.first
-			task.due_on = 1.day.ago
+			task.due_on = 2.day.ago
 			task.save
 			@song.reload
 			assert @song.late?
+		end
+
+	end
+
+	describe "Lyrics and Rhymes" do 
+
+		before do 
+			@song = FactoryGirl.create(:song)
+			@lyrics = <<-LYRIC
+    Other harvests there are than those that lie
+    Glowing and ripe 'neath an autumn sky,
+        Awaiting the sickle keen,
+    Harvests more precious than golden grain,
+    Waving o'er hillside, valley or plain,
+        Than fruits 'mid their leafy screen.
+
+LYRIC
+
+		end
+
+		it "should store lyrics" do 
+			@song.lyrics = @lyrics
+			@song.save
+			assert @song.lyrics.present?
+		end
+
+		it "should parse each line for words to rhyme" do 
+			@song.lyrics = @lyrics
+			@song.save
+			assert @song.words_for_rhyming.length == 6 # one for each line
+			assert_includes @song.words_for_rhyming, "screen"
+		end
+
+		it "should have suggested rhymes for each line" do 
+			@song.lyrics = @lyrics
+			@song.save
+			assert @song.rhyme_suggestions["screen"].length > 0
 		end
 
 	end

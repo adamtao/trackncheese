@@ -46,7 +46,7 @@ class Task < ActiveRecord::Base
 	# The color for this item on the calendar
 	#
 	def color_for_calendar
-		@color_for_calendar ||= (self.song_id.present?) ? self.song.color_for_calendar : nil
+		@color_for_calendar ||= (self.song_id.present?) ? self.song.color_for_calendar : CALENDAR_COLORS.first
 	end
 
 end

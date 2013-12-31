@@ -53,6 +53,7 @@ class ProjectsIntegrationTest < ActionDispatch::IntegrationTest
 
 		it "should have red text on songs that are late" do 
 			@project.finish_on = 1.day.ago
+			@project.created_at = 2.months.ago
 			@project.save
 			visit project_path(@project)
 			song = @project.songs.first
@@ -106,6 +107,11 @@ class ProjectsIntegrationTest < ActionDispatch::IntegrationTest
 			@project.reload
 			@project.tasks.count.must_equal( task_count + 1 )
 			current_path.must_equal project_path(@project)
+		end
+
+		it "should show project name on new task page" do 
+			click_on "new task"
+			must_have_content @project.name
 		end
 
 		it "should delete tasks" do 

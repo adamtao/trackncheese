@@ -78,7 +78,7 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 		end
 
 		it "should link to the project page" do 
-			must_have_link "Back", href: project_path(@project)
+			must_have_link @project.name, href: project_path(@project)
 		end
 
 		it "should not link to add more songs" do
@@ -105,7 +105,7 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 
 	end
 
-	describe "Song page" do 
+	describe "Song page-tasks and calendar" do 
 		before do 
 			@project = my_cookie_project
 			@song = @project.songs.first
@@ -138,7 +138,7 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 
 		it "should indicate late tasks" do 
 			task = @song.tasks.first
-			task.due_on = 1.day.ago
+			task.due_on = 2.days.ago
 			task.save
 			visit project_song_path(@project, @song)
 			must_have_css("span.late")
@@ -153,6 +153,11 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 			@song.reload
 			@song.tasks.count.must_equal( task_count + 1 )
 			current_path.must_equal project_song_path(@project, @song)
+		end
+
+		it "should show song name on new task form" do
+			click_on "new task"
+			must_have_content @song.title
 		end
 
 		it "should delete tasks" do 
@@ -178,8 +183,6 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 			current_path.must_equal project_song_path(@project, @song)
 		end
 
-		it "should have the arranger"
-		
 		it "should show a calendar" do 
 			must_have_xpath("//div[@id='calendar'][@data-events='#{project_song_url(@project, @song, format: :json)}']")
 		end
@@ -187,6 +190,77 @@ class SongsIntegrationTest < ActionDispatch::IntegrationTest
 		it "might show a google ad" do 
 			must_have_xpath("//div[@style='width:300px;height:250px;background:#c8c8c8;']")
 		end
+
+	end
+
+	describe "Song page-concept and lyrics" do
+
+		before do 
+			@project = my_cookie_project
+			@song = @project.songs.first
+			@lyrics = <<-LYRIC
+    Other harvests there are than those that lie
+    Glowing and ripe 'neath an autumn sky,
+        Awaiting the sickle keen,
+    Harvests more precious than golden grain,
+    Waving o'er hillside, valley or plain,
+        Than fruits 'mid their leafy screen.
+
+LYRIC
+			visit project_song_path(@project, @song)
+		end
+
+		it "should store the song concept"
+
+		it "should have inspiration for the concept"
+		# Current events
+		# Historical stories
+		# Love stories
+		# social media trending words
+		# ??
+
+		it "should promote songwriting helps"
+		# Berklee/coursera class
+		# books on amazon (via referral of course)
+
+		it "should have the lyrics editor" do 
+			fill_in :song_lyrics, with: @lyrics 
+			click_on "Save lyrics"
+			@song.reload
+			assert @song.lyrics.present?
+		end
+
+		it "should suggest rhymes" do 
+			fill_in :song_lyrics, with: @lyrics 
+			click_on "Save lyrics"
+			must_have_xpath("//dl[@class='accordion']")
+			must_have_xpath("//ul[@id='rhymes_for_screen']")
+		end
+
+		it "should have a quick rhyme lookup"
+	end
+
+	describe "Song page-arranger" do
+
+		before do 
+			@project = my_cookie_project
+			@song = @project.songs.first
+			visit project_song_path(@project, @song)
+		end
+
+		it "should have the arranger"
+
+	end
+
+	describe "Song page-attachments" do
+
+		before do 
+			@project = my_cookie_project
+			@song = @project.songs.first
+			visit project_song_path(@project, @song)
+		end
+		
+		it "should have attachments"
 
 	end
 

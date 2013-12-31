@@ -102,14 +102,44 @@ class Song < ActiveRecord::Base
     @calendar_items ||= incomplete_tasks + [Task.new(name: "Finish song", due_on: self.finish_on)]
   end
 
-  # TODO: This should go somewhere else...
-  def self.colors
-    ['#FF69B4', '#FF7F50', '#FFD700', '#DDA0DD', '#00FF7F', '#B0E0E6', '#D2B48C', '#2F4F4F', '#CD5C5C', '#FFC0CB', '#FF4500', '#F0E68C', '#9932CC', '#6B8E23', '#7FFFD4', '#7B68EE', '#A0522D']
-  end
-
   # The color for this item on the calendar
   #
   def color_for_calendar
-    @color_for_calendar ||= self.class.colors[self.position]
+    @color_for_calendar ||= CALENDAR_COLORS[self.position]
+  end
+
+  # List of words which might be useful for rhyming
+  #
+  def words_for_rhyming
+    @words_for_rhyming ||= self.parse_lyrics_for_line_endings
+  end
+
+  # Parse the lyrics to come up with words for rhyming
+  #
+  def parse_lyrics_for_line_endings
+    return [] if self.lyrics.blank?
+    w = []
+    self.lyrics.split(/\r\n|\r|\n/).each do |line|
+      if word = line.split(/\s/).last
+        word.gsub!(/[^a-zA-Z]/, "")
+        w << word if word.length > 1
+      end
+    end
+    w.uniq
+  end
+
+  # Suggest rhymes for each line of text in the song's lyrics
+  #
+  def rhyme_suggestions
+    r = Rhymes.new
+    rhymes = {}
+    self.words_for_rhyming.each do |w|
+      begin
+        rhymes[w] = r.rhyme(w)
+      rescue Rhymes::UnknownWord
+        rhymes[w] = ["(no rhymes--unknown word)"]
+      end
+    end
+    rhymes
   end
 end

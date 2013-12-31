@@ -1,18 +1,12 @@
 <div class="title row">
-	<div class="large-10 columns">
+	<div class="large-9 columns">
 		<h1><%= @song.title %></h1>
-		<h6 class="subheader">Goal: finish by <%=l @song.finish_on, format: :long %>.</h6>
-		<div class="icon-actions">
-			<% if @song.single? %>
-				<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Add a song to the project">
-					<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "Add a song", size: "24x24"), new_project_song_path(@project) %>
-				</span>
-			<% else %>
-				<%= link_to "<< Back to the project", @song.project, class: "small" %>
-			<% end %>
-		</div>
+		<h6 class="subheader">Goal: finish by <%=l @song.finish_on, format: :long %>.
+		<i>(<%= distance_of_time_in_words_to_now(@song.finish_on) %>
+				<%= (@song.finish_on > Date.today) ? "from now" : "ago" %>)</i>
+		</h6>
 	</div>
-	<div class="large-2 columns">
+	<div class="large-3 columns">
 		<div style="text-align: right;">
 			<% if @song.single? %>
 				<%= link_to "delete project", @project, data: {confirm: "Are you sure? This cannot be undone." }, method: :delete, class: "delete" %>
@@ -21,87 +15,167 @@
 				<%= link_to "delete song", [@project, @song], data: { confirm: "Are you sure? This cannot be undone." }, method: :delete, class: "delete" %>
 				<%= link_to image_tag("icons-128/Symbol - Delete.png", alt: "", size: "24x24"), [@project, @song], data: { confirm: "Are you sure? This cannot be undone." }, method: :delete %>
 			<% end %>
-		</div>
-	</div>
-</div>
-
-
-<div class="row">
-	<div class="large-12 columns">
-		<div class="panel">Temporary holding place for arranger</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="large-7 columns">
-
-		<div class="task-list row">
-			<div class="large-3 small-12 columns">
-				<h5 class="subheader">Song Tasks</h5>
-			</div>
-			<div class="large-6 small-9 columns">
-				<div class="progress success radius" id="task-counter-<%= @song.project_id %>" data-completedcount="<%= @song.completed_tasks.count %>" data-incompletecount="<%= @song.incomplete_tasks.count %>">
-					<span class="meter" id="meter-<%= @song.project_id %>" style="width: <%=number_to_percentage @song.percent_complete, precision: 0 %>">
-					</span>
-				</div>
-			</div>
-			<div class="large-3 small-3 columns">
-				<div class="status_container">
-					<small id='percent-complete-<%=@song.project_id %>'><%=number_to_percentage @song.percent_complete, precision: 0 %> complete</small>
-				</div>
-			</div>
-		</div>
-
-		<div class="icon-actions">
-			<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "", size: "24x24"), new_project_song_task_path(@project, @song) %>
-			<%= link_to "new task", new_project_song_task_path(@project, @song) %>
-		</div>
-		<ul id="task-list">
-			<% @song.incomplete_tasks.each do |task| %>
-			<li id="task_row_<%= task.id %>">
-				<%= check_box_tag task.id, task.id, task.complete?, class: 'completer', 
-					data: { 
-						task: task.id, 
-						project: (task.project) ? task.project_id : task.song.project_id,
-						song: task.song_id,
-						name: task.name, 
-						due_on: I18n.l(task.due_on, format: :short)
-					} %>
-				<%= link_to task.name, edit_project_song_task_path(@song.project, @song, task) %>
-				<%= content_tag :span, class: task.late? ? "late" : "" do %><i>due: <%=l task.due_on, format: :short %></i><% end %>
-				<%= link_to(image_tag('trash.gif', alt: "delete task #{task.id}"), [@song.project, @song, task], method: :delete, data: { confirm: "Are you sure you want to delete the task?"} ) %>
-			</li>
+			<br/><br/>
+			<% if @song.single? %>
+				<span data-tooltip class="has-tip" data-options="disable-for-touch:true" title="Add a song to the project">
+					<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "Add a song", size: "24x24"), new_project_song_path(@project) %>
+				</span>
 			<% end %>
-		</ul>
+		</div>
+	</div>
+</div>
 
-		<h6 class="subheader" id='completed-tasks-title'>Completed Tasks
-			(<%= @song.completed_tasks.count %>)</h6>
-		<ul id="completed-tasks">
-			<% @song.completed_tasks.each do |task| %>
-			<li id="task_row_<%= task.id %>">
-				<%= check_box_tag task.id, task.id, task.complete?, class: 'incompleter', 
-					data: { 
-						task: task.id, 
-						project: (task.project) ? task.project_id : task.song.project_id,
-						song: task.song_id,
-						name: task.name, 
-						due_on: I18n.l(task.due_on, format: :short)
-					} %>
-				<%= link_to task.name, edit_project_song_task_path(@song.project, @song, task) %>
-				<i>completed: <%=l task.completed_at.to_date, format: :short %></i>
-			</li>
-			<% end %>
-		</ul>
+<div class="tabs-container">
+	<dl class="tabs" data-tab>
+	  <dd class="active"><a href="#taskscalendar">Tasks/Calendar</a></dd>
+	  <dd><a href="#lyrics">Lyrics</a></dd>
+	  <dd><a href="#arranger">Arranger</a></dd>
+	  <dd><a href="#attachments">Attachments</a></dd>
+	</dl>
+</div>
+
+<div class="tabs-content">
+	<div class="content active" id="taskscalendar">
+
+		<div class="row">
+			<div class="large-7 columns">
+
+				<div class="task-list row">
+					<div class="large-3 small-12 columns">
+						<h5 class="subheader">Song Tasks</h5>
+					</div>
+					<div class="large-6 small-9 columns">
+						<div class="progress success radius" id="task-counter-<%= @song.project_id %>" data-completedcount="<%= @song.completed_tasks.count %>" data-incompletecount="<%= @song.incomplete_tasks.count %>">
+							<span class="meter" id="meter-<%= @song.project_id %>" style="width: <%=number_to_percentage @song.percent_complete, precision: 0 %>">
+							</span>
+						</div>
+					</div>
+					<div class="large-3 small-3 columns">
+						<div class="status_container">
+							<small id='percent-complete-<%=@song.project_id %>'><%=number_to_percentage @song.percent_complete, precision: 0 %> complete</small>
+						</div>
+					</div>
+				</div>
+
+				<div class="icon-actions">
+					<%= link_to image_tag("icons-128/Symbol - Add.png", alt: "", size: "24x24"), new_project_song_task_path(@project, @song) %>
+					<%= link_to "new task", new_project_song_task_path(@project, @song), data: { "reveal-id" => "new_task_modal" } %>
+				</div>
+				<ul id="task-list">
+					<% @song.incomplete_tasks.each do |task| %>
+					<li id="task_row_<%= task.id %>">
+						<%= check_box_tag task.id, task.id, task.complete?, class: 'completer', 
+							data: { 
+								task: task.id, 
+								project: (task.project) ? task.project_id : task.song.project_id,
+								song: task.song_id,
+								name: task.name, 
+								due_on: I18n.l(task.due_on, format: :short)
+							} %>
+						<%= link_to task.name, edit_project_song_task_path(@song.project, @song, task) %>
+						<%= content_tag :span, class: task.late? ? "late" : "" do %><i>due: <%=l task.due_on, format: :short %></i><% end %>
+						<%= link_to(image_tag('trash.gif', alt: "delete task #{task.id}"), [@song.project, @song, task], method: :delete, data: { confirm: "Are you sure you want to delete the task?"} ) %>
+					</li>
+					<% end %>
+				</ul>
+
+				<h6 class="subheader" id='completed-tasks-title'>Completed Tasks
+					(<%= @song.completed_tasks.count %>)</h6>
+				<ul id="completed-tasks">
+					<% @song.completed_tasks.each do |task| %>
+					<li id="task_row_<%= task.id %>">
+						<%= check_box_tag task.id, task.id, task.complete?, class: 'incompleter', 
+							data: { 
+								task: task.id, 
+								project: (task.project) ? task.project_id : task.song.project_id,
+								song: task.song_id,
+								name: task.name, 
+								due_on: I18n.l(task.due_on, format: :short)
+							} %>
+						<%= link_to task.name, edit_project_song_task_path(@song.project, @song, task) %>
+						<i>completed: <%=l task.completed_at.to_date, format: :short %></i>
+					</li>
+					<% end %>
+				</ul>
+			</div>
+
+			<div class="large-5 columns">
+				<div id="calendar" data-events="<%= project_song_url(@project, @song, format: :json) %>" 
+					data-year="<%= @song.start_on.year %>"
+					data-month="<%= @song.start_on.month.to_i - 1 %>"
+					data-date="<%= @song.start_on.day %>" >
+				</div>
+
+				<div class="ad-container">
+				<%= google_adsense_include_tag client: ENV['ADSENSE_CLIENT'], slot: 'song_page_right_column', width: 300, height: 250 %>
+				</div>
+
+			</div>
+
+		</div>
 	</div>
 
-	<div class="large-5 columns">
-		<div id="calendar" data-events="<%= project_song_url(@project, @song, format: :json) %>"></div>
+	<div class="content" id="lyrics">
+		<div class="row">
+			<div class="large-8 columns">
+				<h4>Use the space below as a scratchpad for your lyrics</h4>
+				<%= simple_form_for [@project, @song], remote: true do |f| %>
+					<%= f.input :lyrics, label: false, input_html: {rows: 20} %>
+					<%= f.submit "Save lyrics", class: "medium round button" %>
+				<% end %>
+			</div>
+			<div class="large-4 columns">
+				<h4>Rhyme help</h4>
 
-		<div class="ad-container">
-		<%= google_adsense_include_tag client: ENV['ADSENSE_CLIENT'], slot: 'song_page_right_column', width: 300, height: 250 %>
+				<dl class="accordion" id="rhymes" data-accordion>
+					<% if @song.words_for_rhyming.length > 0 %>
+						<%= render 'rhymes' %>
+					<% else %>
+						<i>Write a line or two and we'll suggest some rhymes.</i>
+					<% end %>
+				</dl>
+
+			</div>
 		</div>
+	</div>
 
+	<div class="content" id="arranger">
+		<div class="row">
+			<div class="large-12 columns">
+				The song arranger goes here.
+			</div>
+		</div>
+	</div>
+
+	<div class="content" id="attachments">
+		<div class="row">
+			<div class="large-12 columns">
+				Attachments (demos, tracks, etc.) here
+			</div>
+		</div>
 	</div>
 
 </div>
-<br/>
+
+<%= content_for :modals do %>
+	<div id="new_attachment_modal" class="reveal-modal small" data-reveal>
+		<h3>Attach A File:</h3>
+		<%#= render 'attachments/form' %>
+		<a class="close-reveal-modal">&#215;</a>
+	</div>
+
+	<% if can? :create, Task %>
+	<div id="new_task_modal" class="reveal-modal small" data-reveal>
+		<h3>New Task:</h3>
+		<%= render 'tasks/form' %>
+		<a class="close-reveal-modal">&#215;</a>
+	</div>
+	<% end %>
+<% end %>
+
+<%= content_for :breadcrumbs do %>
+	<% unless @song.single? %>
+	<li><%= link_to @project.name, @project %></li>
+	<% end %>
+	<li class='current'><%= link_to @song.title, '#' %></li>
+<% end %>

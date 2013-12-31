@@ -17,7 +17,10 @@ $ ->
 	
 	$('#calendar').fullCalendar
 		events: $('#calendar').data('events')
-		theme: true
+		year: $('#calendar').data('year')
+		month: $('#calendar').data('month')
+		date: $('#calendar').data('date')
+		theme: false
 		header: {
 			left: 'title',
 			center: '',
