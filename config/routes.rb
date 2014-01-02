@@ -23,6 +23,7 @@ Trackncheese::Application.routes.draw do
 					get :toggle
 				end
 			end
+			resources :song_attachments
 		end
 	end
 end

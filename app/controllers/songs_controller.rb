@@ -4,7 +4,9 @@ class SongsController < ApplicationController
 	load_and_authorize_resource only: [:show, :new, :create, :update, :destroy]
 
 	def show
-		@element = [@project, @song, Task.new] # element for the new task form
+		@element = [@project, @song, Task.new(song: @song)] # element for the new task form
+		@song_attachment = SongAttachment.new
+		@active_tab = params[:active_tab] || 'tasks'
 		respond_to do |format|
 			format.html
 			format.json 
@@ -24,10 +26,14 @@ class SongsController < ApplicationController
 	end
 
 	def update
-		@already_active = 1 # 1 = collapses all accordions in the rhymer
+		@already_active = 0 # 1 = collapses all accordions in the rhymer
+		url_options = {}
+		if params[:active_tab]
+			url_options[:active_tab] = params[:active_tab]
+		end
 		if @song.update_attributes(safe_params)
 			respond_to do |format|
-				format.html {	redirect_to [@project, @song] }
+				format.html {	redirect_to project_song_path(@project, @song, url_options) }
 				format.js
 			end
 		else

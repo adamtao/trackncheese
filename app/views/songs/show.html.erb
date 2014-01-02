@@ -27,15 +27,14 @@
 
 <div class="tabs-container">
 	<dl class="tabs" data-tab>
-	  <dd class="active"><a href="#taskscalendar">Tasks/Calendar</a></dd>
-	  <dd><a href="#lyrics">Lyrics</a></dd>
-	  <dd><a href="#arranger">Arranger</a></dd>
-	  <dd><a href="#attachments">Attachments</a></dd>
+	  <dd <% if @active_tab && @active_tab == 'tasks' || @active_tab == nil %>class="active"<% end %>><a href="#taskscalendar">Tasks/Calendar</a></dd>
+	  <dd <% if @active_tab && @active_tab == 'lyrics' %>class="active"<% end %>><a href="#lyrics">Lyrics</a></dd>
+	  <dd <% if @active_tab && @active_tab == 'attachments' %>class="active"<% end %>><a href="#attachments">Attachments</a></dd>
 	</dl>
 </div>
 
 <div class="tabs-content">
-	<div class="content active" id="taskscalendar">
+	<div class="content <% if @active_tab && @active_tab == 'tasks' || @active_tab == nil %>active<% end %>" id="taskscalendar">
 
 		<div class="row">
 			<div class="large-7 columns">
@@ -115,17 +114,18 @@
 		</div>
 	</div>
 
-	<div class="content" id="lyrics">
+	<div class="content <% if @active_tab && @active_tab == 'lyrics' %>active<% end %>" id="lyrics">
 		<div class="row">
 			<div class="large-8 columns">
 				<h4>Use the space below as a scratchpad for your lyrics</h4>
 				<%= simple_form_for [@project, @song], remote: true do |f| %>
+					<%= hidden_field_tag :active_tab, 'lyrics' %>
 					<%= f.input :lyrics, label: false, input_html: {rows: 20} %>
 					<%= f.submit "Save lyrics", class: "medium round button" %>
 				<% end %>
 			</div>
 			<div class="large-4 columns">
-				<h4>Rhyme help</h4>
+				<h4>Rhyme help <%= link_to image_tag('refresh-icon.png', alt: 'refresh', id: 'refresh_icon', size: '28x28'), [@project, @song], id: 'refresh_rhymes' %></h4>
 
 				<dl class="accordion" id="rhymes" data-accordion>
 					<% if @song.words_for_rhyming.length > 0 %>
@@ -139,18 +139,24 @@
 		</div>
 	</div>
 
-	<div class="content" id="arranger">
+	<div class="content <% if @active_tab && @active_tab == 'attachments' %>active<% end %>" id="attachments">
 		<div class="row">
-			<div class="large-12 columns">
-				The song arranger goes here.
-			</div>
-		</div>
-	</div>
+			<div class="large-7 columns">
+				<h4>Attachments <small>(demos, tracks, etc.)</small></h4>
 
-	<div class="content" id="attachments">
-		<div class="row">
-			<div class="large-12 columns">
-				Attachments (demos, tracks, etc.) here
+				<ul class="file-list">
+					<% @song.attachments.each do |att| %>
+					<li> <%= link_to att.attachment_file_name, att.attachment.url %>
+						<br/>
+						<%= link_to image_tag("trash.gif", alt: 'delete'), [@project, @song, att], method: :delete, confirm: "Are you sure you want to delete the file?" %>
+						<i>Uploaded: <%= l att.updated_at, format: :short %></i>
+					</li>
+					<% end %>
+				</ul>
+			</div>
+			<div class="large-5 columns">
+				<h6>New Attachment:</h6>
+				<%= render 'song_attachments/form' %>
 			</div>
 		</div>
 	</div>
@@ -158,13 +164,7 @@
 </div>
 
 <%= content_for :modals do %>
-	<div id="new_attachment_modal" class="reveal-modal small" data-reveal>
-		<h3>Attach A File:</h3>
-		<%#= render 'attachments/form' %>
-		<a class="close-reveal-modal">&#215;</a>
-	</div>
-
-	<% if can? :create, Task %>
+	<% if can? :create, Task.new(song: @song) %>
 	<div id="new_task_modal" class="reveal-modal small" data-reveal>
 		<h3>New Task:</h3>
 		<%= render 'tasks/form' %>

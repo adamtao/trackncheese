@@ -41,6 +41,13 @@ ul {
 			}
 		}
 	}
+	&.completed-tasks {
+		li {
+			span.late {
+				color: #666;
+			}
+		}
+	}
 }
 
 .error_messages {

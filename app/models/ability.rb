@@ -40,13 +40,18 @@ class Ability
       user.projects.include?(s.project)
     end
 
-    can :create, Task
     can :manage, Task do |t|
       if t.project
         user.projects.include?(t.project)
       elsif t.song
         user.projects.include?(t.song.project)
       end
+    end
+
+    can :manage, SongAttachment do |sa|
+      if sa.song && sa.song.project
+        user.projects.include?(sa.song.project)
+       end
     end
 
   end

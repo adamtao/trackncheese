@@ -27,6 +27,7 @@ gem 'friendly_id'
 gem 'ads-rails'
 gem 'rabl'
 gem 'rhymes'
+gem 'paperclip'
 
 group :development do
   gem 'better_errors'

@@ -1,0 +1,6 @@
+<%= simple_form_for [@project, @song, @song_attachment], html: {multipart: true} do |f| %>
+
+	<%= f.input :attachment, label: 'Choose a file:' %>
+	<%= f.submit "Upload", class: "small round button" %>
+
+<% end %>

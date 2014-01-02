@@ -6,6 +6,7 @@ class Song < ActiveRecord::Base
 	acts_as_list scope: :project
 
   has_many :tasks, -> { order :due_on }, dependent: :destroy
+  has_many :attachments, :class_name => "SongAttachment" #, :foreign_key => "song_id"
 
 	validates :title, presence: true
 	# validates :project_id, presence: true

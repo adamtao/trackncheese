@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131217204001) do
+ActiveRecord::Schema.define(version: 20140102184920) do
 
   create_table "friendly_id_slugs", force: true do |t|
     t.string   "slug",                      null: false
@@ -59,6 +59,18 @@ ActiveRecord::Schema.define(version: 20131217204001) do
 
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+
+  create_table "song_attachments", force: true do |t|
+    t.integer  "song_id"
+    t.string   "attachment_file_name"
+    t.integer  "attachment_file_size"
+    t.string   "attachment_content_type"
+    t.datetime "attachment_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "song_attachments", ["song_id"], name: "index_song_attachments_on_song_id", using: :btree
 
   create_table "songs", force: true do |t|
     t.string   "title"

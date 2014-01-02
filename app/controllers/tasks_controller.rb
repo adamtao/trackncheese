@@ -2,7 +2,8 @@ class TasksController < ApplicationController
 	before_filter :new_task, only: :create
 	load_resource :project
 	before_filter :load_song_if_present
-	load_and_authorize_resource only: [:show, :new, :create, :edit, :update, :destroy, :toggle]
+	load_and_authorize_resource only: [:show, :edit, :update, :destroy, :toggle]
+	load_resource only: [:new, :create]
 
 	def toggle
     @task.completed_at = @task.completed_at.blank? ? Time.now : nil
@@ -16,15 +17,25 @@ class TasksController < ApplicationController
 	end
 
 	def new
-		@element = (params[:song_id]) ? [@project, @song, @task] : [@project, @task]
+		if params[:song_id]
+			@task.song = @song
+			@element = [@project, @song, @task]
+		else
+			@task.project = @project
+			@element = [@project, @task]
+		end
+		authorize! :create, @task
 	end
 
 	def create	
 		if params[:song_id]	
 			@task.song_id = @song.id 
+			@element = [@project, @song, @task]
 		else
 			@task.project_id = @project.id
+			@element = [@project, @task]
 		end
+		authorize! :create, @task
 		if @task.save
 			redirect_to redirect_path, notice: "Groovy. Your new task was added."
 		else
