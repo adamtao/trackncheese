@@ -14,7 +14,6 @@
 /.bundle
 /vendor/bundle/
 /vendor/ruby/
-/app/assets/images/bg/
 
 # minimal Rails specific artifacts
 db/*.sqlite3
@@ -29,7 +28,6 @@ db/*.sqlite3
 .redcar/
 .sass-cache
 /config/config.yml
-/config/database.yml
 /coverage.data
 /coverage/
 /db/*.javadb/
