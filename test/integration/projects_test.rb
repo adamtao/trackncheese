@@ -31,8 +31,6 @@ class ProjectsIntegrationTest < ActionDispatch::IntegrationTest
 			must_have_xpath("//div[@id='calendar'][@data-events='#{project_url(@project, project_wide: true, format: :json)}']")
 		end
 
-		it "should toggle project-wide tasks in calendar"
-
 		it "might show a google ad" do 
 			must_have_xpath("//div[@style='width:300px;height:250px;background:#c8c8c8;']")
 		end

@@ -212,13 +212,6 @@ LYRIC
 
 		it "should store the song concept"
 
-		it "should have inspiration for the concept"
-		# Current events
-		# Historical stories
-		# Love stories
-		# social media trending words
-		# ??
-
 		it "should promote songwriting helps"
 		# Berklee/coursera class
 		# books on amazon (via referral of course)
@@ -237,20 +230,22 @@ LYRIC
 			must_have_xpath("//ul[@id='rhymes_for_screen']")
 		end
 
-		it "should have a quick rhyme lookup"
+		# I was going to have a form where you could type
+		# a word and get a rhyme, but it seems unnecessary now...
+		# it "should have a quick rhyme lookup"
+		
 	end
 
-	describe "Song page-arranger" do
-
-		before do 
-			@project = my_cookie_project
-			@song = @project.songs.first
-			visit project_song_path(@project, @song)
-		end
-
-		it "should have the arranger"
-
-	end
+  ###### We're going to do the arranger later...
+  #
+	# describe "Song page-arranger" do
+	# 	before do 
+	# 		@project = my_cookie_project
+	# 		@song = @project.songs.first
+	# 		visit project_song_path(@project, @song)
+	# 	end
+	# 	it "should have the arranger"
+	# end
 
 	describe "Song page-attachments" do
 
