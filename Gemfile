@@ -32,8 +32,6 @@ gem 'paperclip'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
-  gem 'guard-bundler'
-  gem 'guard-rails'
   gem 'hub', :require=>nil
   gem 'quiet_assets'
   gem 'rb-fchange', :require=>false
@@ -42,6 +40,8 @@ group :development do
 end
 
 group :development, :test do
+  gem 'guard-bundler'
+  gem 'guard-rails'
   gem 'factory_girl_rails'
   gem 'zeus'
 end

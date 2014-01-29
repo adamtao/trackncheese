@@ -12,8 +12,14 @@ $ ->
 	# hide the text field with the date (don't use a hidden field so we can test the form)
 	$("form#new_project div.project_finish_on").hide()
 
-	$("form.edit_project #project_finish_on").datepicker()
-	$("#task_due_on").datepicker()
+	$("form.edit_project #project_finish_on").datepicker(
+		altField: "#project_finish_on",
+		altFormat: "yy-mm-dd"
+	)
+	$("#task_due_on").datepicker(
+		altField: "#task_due_on",
+		altFormat: "yy-mm-dd"
+	)
 	
 	$('#calendar').fullCalendar
 		events: $('#calendar').data('events')
