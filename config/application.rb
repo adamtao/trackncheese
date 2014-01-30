@@ -22,6 +22,6 @@ module Trackncheese
     # config.i18n.default_locale = :de
 
     # Trying to encourage asset pipeline to precompile the images in the vendor/assets folders
-    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
+    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif vendor/modernizr.js)
   end
 end
