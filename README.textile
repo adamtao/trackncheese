@@ -1,29 +1,27 @@
 h1. Trackncheese
 
-This application was generated with the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem provided by the "RailsApps Project":http://railsapps.github.io/.
+What is it? Trackncheese is another web-based project management system. This one is tailored for musicians. Built mainly for personal reasons, I hope it is useful for others. The basic story: A musician has ideas and aspires to release an album or a single. Trackncheese is the place to keep track of stuff to make it happen. The stuff:
 
-h2. Diagnostics
+* Tasks (with calendar views)
+* Lyrics
+* Arrangement
+* Song demos
+* Practice schedules
+* Recording schedules
+* Mixing/mastering dates
+* Release dates
+* Fellow musicians (collaborators, hired studio musicians)
+* Budgets
+* Marketing plans
 
-This application was built with recipes that are known to work together.
-
-This application was built with preferences that are NOT known to work together.
-
-If the application doesn't work as expected, please "report an issue":https://github.com/RailsApps/rails_apps_composer/issues and include these diagnostics:
-
-We'd also like to know if you've found combinations of recipes or preferences that do work together.
-
-Recipes:
-["apps4", "controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"]
-
-Preferences:
-{:git=>true, :apps4=>"none", :dev_webserver=>"webrick", :prod_webserver=>"same", :database=>"mysql", :templates=>"erb", :unit_test=>"minitest", :integration=>"minitest-capybara", :continuous_testing=>"guard", :fixtures=>"factory_girl", :frontend=>"foundation", :email=>"mandrill", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"home_app", :rvmrc=>true, :quiet_assets=>true, :local_env_file=>true, :better_errors=>true, :github=>true}
+Does it do all this today? No. So far it is really just tasks plus a lyric notepad with rhyme helps. What I need is a system to keep track of the tasks needed to build this system. Deep.
 
 h2. Ruby on Rails
 
 This application requires:
 
 * Ruby version 2.0.0
-* Rails version 4.0.0
+* Rails version 4.0.2
 
 Learn more about "Installing Rails":http://railsapps.github.io/installing-rails.html.
 
@@ -34,31 +32,15 @@ This application uses MySQL with ActiveRecord.
 h2. Development
 
 * Template Engine: ERB
-* Testing Framework: Test::Unit
-* Front-end Framework: Zurb Foundation
-* Form Builder: None
+* Testing Framework: Minitest
+* Front-end Framework: Zurb Foundation (5)
+* Form Builder: SimpleForm
 * Authentication: OmniAuth
 * Authorization: CanCan
 
 h2. Email
 
 The application is configured to send email using a Mandrill account.
-
-h2. Getting Started
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-
-h2. Documentation and Support
-
-This is the only documentation.
-
-h4. Issues
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-
-h2. Similar Projects
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 h2. Contributing
 
@@ -73,8 +55,8 @@ If you add functionality to this application, create an alternative implementati
 
 h2. Credits
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Adam Anderson made this.
 
 h2. License
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Use it if you want.
